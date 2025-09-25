@@ -2,9 +2,11 @@
   "name": "travel-buddy",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "dev": "nodemon index.ts"
+    "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' index.ts",
+    "start": "ts-node index.ts",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
