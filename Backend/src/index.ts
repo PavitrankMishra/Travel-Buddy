@@ -18,13 +18,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/auth", authRoutes);
 
 app.get("/", (req, res) => {
+    console.log("Route visited /");
     res.send("Server is running smoothly");
 });
 
 // Start server
 const PORT = process.env.PORT || 3000;
 console.log(PORT);
-console.log("PORT is: ", process.env.port);
+console.log("PORT is: ", PORT);
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
