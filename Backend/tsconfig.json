@@ -1,34 +1,15 @@
 {
   "compilerOptions": {
-    // File Layout
+    "target": "ES2020",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "rootDir": "./src",
     "outDir": "./dist",
-
-    // Environment Settings
-    "module": "nodenext",
-    "target": "esnext",
-    "lib": ["esnext"], // Modern JS features
-    "types": ["node"], // Node typings
-
-    // Source Maps
-    "sourceMap": true,
-
-    // Strict Typechecking Options
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Module Handling
     "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
     "skipLibCheck": true,
-
-    // Emit Settings
-    "noEmit": true // Required for ts-node; disables JS output
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

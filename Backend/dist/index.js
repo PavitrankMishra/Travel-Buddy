@@ -1,5 +1,23 @@
-import app from "./server.js";
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+import express from "express";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+dotenv.config();
+// Connect to DB
+connectDB();
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// Routes
+app.use("/api/v1/auth", authRoutes);
+app.get("/", (req, res) => {
+    console.log("Route visited /");
+    res.send("Server is running smoothly");
 });
-//# sourceMappingURL=index.js.map
+// Start server
+const PORT = process.env.PORT;
+console.log(PORT);
+console.log("PORT is: ", PORT);
+app.listen(PORT, () => {
+    console.log(`Our server is running on ${PORT}`);
+});
