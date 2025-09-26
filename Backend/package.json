@@ -5,8 +5,8 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --watch ./ --ext ts --exec \"node --loader ts-node/esm index.ts\"",
-    "start": "node --loader ts-node/esm index.ts",
+    "node": "dist/index.js",
+    "dev": "nodemon src/index.ts",
     "build": "tsc"
   },
   "keywords": [],
