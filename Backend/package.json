@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "node": "dist/index.js",
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon index.ts",
     "build": "tsc"
   },
   "keywords": [],
