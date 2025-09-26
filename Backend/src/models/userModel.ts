@@ -1,7 +1,13 @@
 import mongoose from "mongoose";
 
+export interface TUser {
+    userName: string,
+    email: string,
+    password: string,
+    phone: string
+}
 // Schema
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema<TUser>({
     userName: {
         type: String,
         required: [true, "User name is required"]
@@ -20,4 +26,4 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model<TUser>("User", userSchema);

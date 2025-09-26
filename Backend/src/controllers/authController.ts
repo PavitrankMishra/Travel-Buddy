@@ -1,6 +1,7 @@
-import userModel from "../models/userModel.ts";
+import userModel, { type TUser } from "../models/userModel.ts";
+import type { Request, Response } from "express";
 
-export const registerController = async (req, res) => {
+export const registerController = async (req: Request, res: Response) => {
     try {
         const { userName, email, password, phone } = req.body || {};
         // validation
