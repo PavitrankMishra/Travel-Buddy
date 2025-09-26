@@ -1,4 +1,4 @@
-import userModel, { type TUser } from "../models/userModel.js";
+import userModel, { type TUser } from "../models/userModel.ts";
 import type { Request, Response } from "express";
 
 export const registerController = async (req: Request, res: Response) => {
