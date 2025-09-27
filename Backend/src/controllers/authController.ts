@@ -75,6 +75,7 @@ const loginController = async (req: Request, res: Response) => {
             });
         }
 
+        user.password = undefined;
         return res.status(200).send({
             success: true, // fixed typo
             message: "User login successful",
