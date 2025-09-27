@@ -3,8 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 const { connectDB } = require("./config/db");
 const authRoutes = require("./routes/authRoutes").default;
-
-
+const cityRoutes = require("./routes/citiesRoutes").default;
 dotenv.config();
 
 // Connect to DB
@@ -17,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/cities", cityRoutes);
 
 app.get("/", (req, res) => {
     console.log("Route visited /");
