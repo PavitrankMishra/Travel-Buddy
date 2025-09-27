@@ -4,8 +4,11 @@ import { registerController } from "../controllers/authController.ts";
 const router = express.Router();
 
 // routes
-// REGISTER || POST
 
+// REGISTER || POST
 router.post("/register", registerController);
+
+// LOGIN || POST
+router.post("/login", )
 
 export default router;
