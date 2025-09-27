@@ -1,8 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import connectDB from "./config/db.ts";
-import authRoutes from "./routes/authRoutes.ts";
+const { connectDB } = require("./config/db");
+const authRoutes = require("./routes/authRoutes").default;
+
 
 dotenv.config();
 

@@ -1,15 +1,18 @@
-import userModel from "../models/userModel.js";
-export const registerController = async (req, res) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const userModel = require("../models/userModel").default;
+// Controller to register user
+const registerController = async (req, res) => {
     try {
         const { userName, email, password, phone } = req.body || {};
-        // validation
+        // Validation
         if (!userName || !email || !password) {
             return res.status(500).send({
                 success: false,
                 message: "Please provide all fields",
             });
         }
-        // check user
+        // Check user
         const existing = await userModel.findOne({ email: email });
         if (existing) {
             return res.status(500).send({
@@ -34,3 +37,38 @@ export const registerController = async (req, res) => {
         });
     }
 };
+const loginController = async (req, res) => {
+    try {
+        const { email, password } = req.body || {};
+        // Check if both email id an password are sent
+        if (!email || !password) {
+            return res.status(500).send({
+                success: false,
+                message: "Provide both email and password",
+            });
+        }
+        // Check if the user exist
+        const user = await userModel.findOne({ email: email });
+        if (!user) {
+            return res.status(500).send({
+                success: false,
+                message: "User does not exist. Please register",
+            });
+        }
+        // Successfully login user
+        return res.status(200).send({
+            succes: true,
+            message: "User Login successfull",
+            user
+        });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send({
+            success: false,
+            message: "Error in login api",
+            err
+        });
+    }
+};
+module.exports = { registerController, loginController };

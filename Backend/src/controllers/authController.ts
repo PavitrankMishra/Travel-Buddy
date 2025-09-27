@@ -1,11 +1,12 @@
-import userModel, { type TUser } from "../models/userModel.ts";
+const userModel = require("../models/userModel").default;
+type TUser = import("../models/userModel").TUser;
 import type { Request, Response } from "express";
 
 // Controller to register user
-export const registerController = async (req: Request, res: Response) => {
+const registerController = async (req: Request, res: Response) => {
     try {
         const { userName, email, password, phone } = req.body || {};
-        // validation
+        // Validation
         if (!userName || !email || !password) {
             return res.status(500).send({
                 success: false,
@@ -13,7 +14,7 @@ export const registerController = async (req: Request, res: Response) => {
             })
         }
 
-        // check user
+        // Check user
 
         const existing = await userModel.findOne({ email: email });
         if (existing) {
@@ -41,7 +42,7 @@ export const registerController = async (req: Request, res: Response) => {
     }
 };
 
-export const loginController = async (req: Request, res: Response) => {
+const loginController = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body || {};
         // Check if both email id an password are sent
@@ -67,7 +68,6 @@ export const loginController = async (req: Request, res: Response) => {
             message: "User Login successfull",
             user
         })
-
     } catch (err) {
         console.log(err);
         res.status(500).send({
@@ -77,3 +77,5 @@ export const loginController = async (req: Request, res: Response) => {
         })
     }
 }
+
+module.exports = { registerController, loginController };

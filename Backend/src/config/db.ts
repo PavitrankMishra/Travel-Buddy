@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { connect } from "mongoose";
 
 // MongoDB database connection
 const connectDB = async () => {
@@ -10,4 +10,4 @@ const connectDB = async () => {
     }
 };
 
-export default connectDB;
+module.exports = {connectDB};

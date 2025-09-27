@@ -1,13 +1,18 @@
-import express from "express";
-import dotenv from "dotenv";
-import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
-dotenv.config();
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const { connectDB } = require("./config/db");
+const authRoutes = require("./routes/authRoutes").default;
+dotenv_1.default.config();
 // Connect to DB
 connectDB();
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
 // Routes
 app.use("/api/v1/auth", authRoutes);
 app.get("/", (req, res) => {
