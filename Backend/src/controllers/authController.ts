@@ -1,81 +1,93 @@
 const userModel = require("../models/userModel").default;
 type TUser = import("../models/userModel").TUser;
 import type { Request, Response } from "express";
+const bcrypt = require("bcryptjs");
 
-// Controller to register user
+// Register controller
 const registerController = async (req: Request, res: Response) => {
     try {
         const { userName, email, password, phone } = req.body || {};
-        // Validation
+
         if (!userName || !email || !password) {
-            return res.status(500).send({
+            return res.status(400).send({
                 success: false,
                 message: "Please provide all fields",
-            })
+            });
         }
 
-        // Check user
-
-        const existing = await userModel.findOne({ email: email });
+        const existing = await userModel.findOne({ email });
         if (existing) {
-            return res.status(500).send({
+            return res.status(400).send({
                 success: false,
-                message: "Email already registered. Please Login"
-            })
+                message: "Email already registered. Please login",
+            });
         }
 
-        // Create user
+        // Hash password (fully async)
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
-        const user = await userModel.create({ userName, email, password, phone });
-        res.status(201).send({
+        const user = await userModel.create({ userName, email, password: hashedPassword, phone });
+
+        return res.status(201).send({
             success: true,
             message: "Successfully registered",
-            user
-        })
+            user,
+        });
     } catch (err) {
-        console.log(err);
-        res.status(500).send({
+        console.error(err);
+        return res.status(500).send({
             success: false,
-            message: "Error in register api",
-            err
-        })
+            message: "Error in register API",
+            err,
+        });
     }
 };
 
+// Login controller
 const loginController = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body || {};
-        // Check if both email id an password are sent
+
         if (!email || !password) {
-            return res.status(500).send({
+            return res.status(400).send({
                 success: false,
                 message: "Provide both email and password",
-            })
+            });
         }
 
-        // Check if the user exist
-        const user = await userModel.findOne({ email: email });
+        const user = await userModel.findOne({ email });
         if (!user) {
-            return res.status(500).send({
+            return res.status(400).send({
                 success: false,
                 message: "User does not exist. Please register",
-            })
+            });
         }
 
-        // Successfully login user
+        // Compare password
+        const isMatch = await bcrypt.compare(password, user.password);
+        console.log("Password match:", isMatch);
+
+        if (!isMatch) {
+            return res.status(400).send({
+                success: false,
+                message: "Invalid credentials",
+            });
+        }
+
         return res.status(200).send({
-            succes: true,
-            message: "User Login successfull",
-            user
-        })
+            success: true, // fixed typo
+            message: "User login successful",
+            user,
+        });
     } catch (err) {
-        console.log(err);
-        res.status(500).send({
+        console.error(err);
+        return res.status(500).send({
             success: false,
-            message: "Error in login api",
-            err
-        })
+            message: "Error in login API",
+            err,
+        });
     }
-}
+};
 
 module.exports = { registerController, loginController };
