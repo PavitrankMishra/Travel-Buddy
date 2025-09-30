@@ -11,14 +11,57 @@ const SignupScreen = ({ navigation }) => {
     navigation.navigate("SignIn");
   }
 
-  // function handleEmailInput() {
-  //   setEmail()
-  // }
-
-  function handleSubmit() {
-
+  function handleUserNameInput(text) {
+    setUserName(text);
+  }
+  function handleEmailInput(text) {
+    setEmail(text)
   }
 
+  function handlePasswordInput(text) {
+    setPassword(text);
+  }
+
+  function handlePhoneInput(text) {
+    setPhone(text);
+  }
+
+  async function handleRegisterRequest() {
+    try {
+      const res = await fetch("https://travel-buddy-r69f.onrender.com/api/v1/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "userName": userName,
+          "email": email,
+          "password": password,
+          "phone": phone
+        })
+      });
+
+      if (!res.ok) {
+        throw new Error("Response was not ok");
+      }
+
+      const data = await res.json();
+      console.log("The returned data is: ", data);
+      navigation.navigate("SignIn");
+    } catch (err) {
+      console.log("The error is: ", err);
+    }
+  }
+
+  function handleSubmit() {
+    if (userName.length === 0 || email.length === 0 || password.length === 0 || phone.length === 0) {
+      console.log("The length of some field is zero.");
+      return;
+    } else {
+      console.log("The length of each field is greater than 0");
+      handleRegisterRequest();
+    }
+  }
 
   return (
     <View className='h-full w-full -bg--color-dark--1 flex items-center pt-12'>
@@ -28,12 +71,12 @@ const SignupScreen = ({ navigation }) => {
       </View>
       <View className='w-[80%] flex gap-y-10 items-center justify-center'>
         <Text className='text-white text-3xl border-b-4 border-green-600 w-full text-center rounded-2xl pb-2'>REGISTER</Text>
-        <TextInput placeholder="Username" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={userName}></TextInput>
-        <TextInput placeholder="Email" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={email}></TextInput>
-        <TextInput placeholder="Password" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={password}></TextInput>
-        <TextInput placeholder="Phone " className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={phone}></TextInput>
+        <TextInput placeholder="Username" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={userName} onChangeText={(text) => handleUserNameInput(text)}></TextInput>
+        <TextInput placeholder="Email" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={email} onChangeText={(text) => handleEmailInput(text)}></TextInput>
+        <TextInput placeholder="Password" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={password} onChangeText={(text) => handlePasswordInput(text)}></TextInput>
+        <TextInput placeholder="Phone " className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={phone} onChangeText={(text) => setPhone(text)}></TextInput>
         <View className='w-full flex items-center gap-y-6'>
-          <TouchableOpacity className={`w-full py-4 rounded-xl items-center ${pressed ? "bg-green-500" : "bg-green-600"}`} onPressIn={() => setPressed(true)} onPressOut={() => setPressed(false)} activeOpacity={0.8}>
+          <TouchableOpacity className={`w-full py-4 rounded-xl items-center ${pressed ? "bg-green-500" : "bg-green-600"}`} onPressIn={() => setPressed(true)} onPressOut={() => setPressed(false)} activeOpacity={0.8} onPress={() => handleSubmit()}>
             <Text className='text-white text-2xl font-medium tracking-wider'>Submit</Text>
           </TouchableOpacity>
           <View>
