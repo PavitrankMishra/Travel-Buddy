@@ -15,7 +15,7 @@ type City = {
 };
 
 const HomeScreen = ({ navigation, route }) => {
-  const {userData} = route.params;
+  const { userData } = route.params;
   const [region, setRegion] = useState({
     latitude: 12.9716,
     longitude: 77.5946,
@@ -24,7 +24,7 @@ const HomeScreen = ({ navigation, route }) => {
   });
 
   useEffect(() => {
-      console.log(userData);
+    console.log(userData);
   }, []);
 
   const [cityData, setCityData] = useState<City[]>([]);
@@ -52,7 +52,7 @@ const HomeScreen = ({ navigation, route }) => {
     fetchCitiesList();
   }, []);
 
-
+  const [markerCoordinates, setMarkerCoordinates] = useState(null);
 
   const handleZoom = (zoomIn) => {
     setRegion((prevRegion) => {
@@ -69,12 +69,19 @@ const HomeScreen = ({ navigation, route }) => {
     });
   };
 
+  const handleMapPress = (event) => {
+    const { latitude, longitude } = event.nativeEvent.coordinate;
+    console.log("Clicked coordinates: ", latitude, longitude);
+    setMarkerCoordinates({ latitude, longitude });
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <MapView
         style={{ flex: 1 }}
         region={region}
         onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
+        onPress={handleMapPress}
       >
         {cityData && cityData.length > 0 && cityData.map((c) => {
           return (
@@ -88,7 +95,7 @@ const HomeScreen = ({ navigation, route }) => {
             </>
           )
         })}
-
+        {markerCoordinates && <Marker coordinate={markerCoordinates} />}
       </MapView>
 
       <View style={{ position: 'absolute', bottom: 50, right: 20 }}>
