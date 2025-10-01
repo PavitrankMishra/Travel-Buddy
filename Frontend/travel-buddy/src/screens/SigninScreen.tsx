@@ -37,7 +37,7 @@ const SigninScreen = ({ navigation }) => {
 
             const data = await res.json();
             console.log("Response: ", data);
-            navigation.navigate("Home");
+            navigation.navigate("Home", {userData: data});
         } catch (e) {
             console.log("The error is: ", e);
         }

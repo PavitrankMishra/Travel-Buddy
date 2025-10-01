@@ -14,13 +14,18 @@ type City = {
   visitedOn: string;
 };
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, route }) => {
+  const {userData} = route.params;
   const [region, setRegion] = useState({
     latitude: 12.9716,
     longitude: 77.5946,
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
+
+  useEffect(() => {
+      console.log(userData);
+  }, []);
 
   const [cityData, setCityData] = useState<City[]>([]);
 
@@ -37,11 +42,6 @@ const HomeScreen = ({ navigation }) => {
       console.log("The data is: ", data);
       console.log("City list is: ", data.data.visitedCities);
       setCityData(data.data.visitedCities);
-      data.data.visitedCities.map((c) => (
-        console.log(c.cityName),
-        console.log(c.lat),
-        console.log(c.lng)
-      ))
     } catch (err) {
       console.log(err);
     }
@@ -82,7 +82,8 @@ const HomeScreen = ({ navigation }) => {
               <Marker
                 coordinate={{ latitude: c.lat, longitude: c.lng }}
                 title={c.cityName}
-                description="Silicon Valley of India"
+                description={c.notes}
+                key={c._id}
               />
             </>
           )
@@ -95,7 +96,6 @@ const HomeScreen = ({ navigation }) => {
           <FontAwesome name="search-plus" size={40} color="black" />
         </TouchableOpacity>
 
-        {/* Zoom Out */}
         <TouchableOpacity onPress={() => handleZoom(false)}>
           <FontAwesome name="search-minus" size={40} color="black" />
         </TouchableOpacity>
