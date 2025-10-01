@@ -2,6 +2,7 @@ import { View, Text, Button, TouchableOpacity, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { FontAwesome } from '@expo/vector-icons';
+import * as Location from "expo-location";
 
 
 type City = {
@@ -69,11 +70,26 @@ const HomeScreen = ({ navigation, route }) => {
     });
   };
 
-  const handleMapPress = (event) => {
+  const handleMapPress = async (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
-    console.log("Clicked coordinates: ", latitude, longitude);
+
+    const { status } = await Location.getForegroundPermissionsAsync();
+    if (status !== "granted") {
+      const { status: newStatus } = await Location.requestForegroundPermissionsAsync();
+      if (newStatus !== "granted") {
+        alert("Permission denied to access location.");
+        return;
+      }
+    }
+
     setMarkerCoordinates({ latitude, longitude });
-  }
+
+    let [address] = await Location.reverseGeocodeAsync({ latitude, longitude });
+    console.log(address);
+    console.log("The city is: ", address.city);
+    console.log("The country is: ", address.country);
+  };
+
 
   return (
     <View style={{ flex: 1 }}>
