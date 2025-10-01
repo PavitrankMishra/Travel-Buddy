@@ -22,7 +22,13 @@
       "output": "static",
       "bundler": "metro"
     },
-    "plugins": ["expo-router", ["expo-splash-screen"]],
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen"
+      ],
+      "expo-web-browser"
+    ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true

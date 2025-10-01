@@ -53,8 +53,6 @@ const SigninScreen = ({ navigation }) => {
         }
     }
 
-
-
     console.log(emailValue);
     console.log(passwordValue);
     return (
