@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { FontAwesome } from '@expo/vector-icons';
 import * as Location from "expo-location";
-
+import DetailsSubmitForm from "../components/DetailsSubmitForm";
 
 type City = {
   _id: string;
@@ -29,7 +29,7 @@ const HomeScreen = ({ navigation, route }) => {
   }, []);
 
   const [cityData, setCityData] = useState<City[]>([]);
-
+  const [formVisible, setFormVisible] = useState(false);
   const fetchCitiesList = async () => {
     console.log("This is called");
     try {
@@ -84,6 +84,7 @@ const HomeScreen = ({ navigation, route }) => {
 
     setMarkerCoordinates({ latitude, longitude });
 
+    setFormVisible(true);
     let [address] = await Location.reverseGeocodeAsync({ latitude, longitude });
     console.log(address);
     console.log("The city is: ", address.city);
@@ -92,7 +93,7 @@ const HomeScreen = ({ navigation, route }) => {
 
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 }} >
       <MapView
         style={{ flex: 1 }}
         region={region}
@@ -113,6 +114,11 @@ const HomeScreen = ({ navigation, route }) => {
         })}
         {markerCoordinates && <Marker coordinate={markerCoordinates} />}
       </MapView>
+      {formVisible && (
+        <View style={{ position: 'absolute', top: 75, left: 0, right: 0, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
+          <DetailsSubmitForm />
+        </View>
+      )}
 
       <View style={{ position: 'absolute', bottom: 50, right: 20 }}>
         <TouchableOpacity onPress={() => handleZoom(true)} style={{ marginBottom: 10 }}>
