@@ -31,8 +31,13 @@ const HomeScreen = ({ navigation, route }) => {
     console.log("The data of the user is: ", userData);
     setUserId(userData.user._id);
     console.log("The user id is: ", userData.user._id);
-    fetchCitiesList();
-  }, []);
+  }, [userData]);
+
+  useEffect(() => {
+    if (userId) {
+      fetchCitiesList();
+    }
+  }, [userId]);
 
   const [cityData, setCityData] = useState<City[]>([]);
   const [formVisible, setFormVisible] = useState(false);
@@ -49,6 +54,7 @@ const HomeScreen = ({ navigation, route }) => {
       console.log("The data is: ", data);
       console.log("City list is: ", data.data.visitedCities);
       setCityData(data.data.visitedCities);
+
     } catch (err) {
       console.log("The response should be ", err);
     }
@@ -119,7 +125,7 @@ const HomeScreen = ({ navigation, route }) => {
       </MapView>
       {formVisible && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId = {userId} selectedCountry = {selectedCountry}/>
+          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId={userId} selectedCountry={selectedCountry} />
         </View>
       )}
 
