@@ -24,8 +24,14 @@ const HomeScreen = ({ navigation, route }) => {
     longitudeDelta: 0.05,
   });
 
+  const [selectedCity, setSelectedCity] = useState();
+  const [selectedCountry, setSelectedCountry] = useState();
+  const [userId, setUserId] = useState();
   useEffect(() => {
-    console.log(userData);
+    console.log("The data of the user is: ", userData);
+    setUserId(userData.user._id);
+    console.log("The user id is: ", userData.user._id);
+    fetchCitiesList();
   }, []);
 
   const [cityData, setCityData] = useState<City[]>([]);
@@ -33,7 +39,7 @@ const HomeScreen = ({ navigation, route }) => {
   const fetchCitiesList = async () => {
     console.log("This is called");
     try {
-      const res = await fetch("https://travel-buddy-r69f.onrender.com/api/v1/cities/68d796507093fbbb7d7f3965");
+      const res = await fetch(`https://travel-buddy-r69f.onrender.com/api/v1/cities/${userId}`);
 
       if (!res.ok) {
         throw new Error("Response was not ok");
@@ -44,14 +50,9 @@ const HomeScreen = ({ navigation, route }) => {
       console.log("City list is: ", data.data.visitedCities);
       setCityData(data.data.visitedCities);
     } catch (err) {
-      console.log(err);
+      console.log("The response should be ", err);
     }
   }
-
-
-  useEffect(() => {
-    fetchCitiesList();
-  }, []);
 
   const [markerCoordinates, setMarkerCoordinates] = useState(null);
 
@@ -89,6 +90,8 @@ const HomeScreen = ({ navigation, route }) => {
     console.log(address);
     console.log("The city is: ", address.city);
     console.log("The country is: ", address.country);
+    setSelectedCity(address.city);
+    setSelectedCountry(address.country);
   };
 
 
@@ -115,8 +118,8 @@ const HomeScreen = ({ navigation, route }) => {
         {markerCoordinates && <Marker coordinate={markerCoordinates} />}
       </MapView>
       {formVisible && (
-        <View style={{ position: 'absolute', top: 75, left: 0, right: 0, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsSubmitForm />
+        <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
+          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId = {userId} selectedCountry = {selectedCountry}/>
         </View>
       )}
 
