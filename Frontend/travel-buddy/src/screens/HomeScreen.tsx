@@ -5,6 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import * as Location from "expo-location";
 import DetailsSubmitForm from "../components/DetailsSubmitForm";
 import DetailsDeleteForm from "../components/DetailsDeleteForm";
+import Spinner from '../components/Spinner';
 
 type City = {
   _id: string;
@@ -206,6 +207,7 @@ const HomeScreen = ({ navigation, route }) => {
           )
         })}
         {formVisible && markerCoordinates && <Marker coordinate={markerCoordinates} />}
+        
 
       </MapView>
       {formVisible && (

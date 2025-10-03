@@ -1,5 +1,6 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
+import Spinner from '../components/Spinner';
 
 const SignupScreen = ({ navigation }) => {
   const [pressed, setPressed] = useState(false);
@@ -7,6 +8,8 @@ const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [customMessage, setCustomMessage] = useState("");
   function handleNavigation() {
     navigation.navigate("SignIn");
   }
@@ -26,8 +29,13 @@ const SignupScreen = ({ navigation }) => {
     setPhone(text);
   }
 
-  async function handleRegisterRequest() {
+  async function handleSubmit() {
     try {
+      setLoading(true);
+      if (userName.length === 0 || email.length === 0 || password.length === 0 || phone.length === 0) {
+        setLoading(false);
+        throw new Error("Invalid email id or password");
+      }
       const res = await fetch("https://travel-buddy-r69f.onrender.com/api/v1/auth/register", {
         method: "POST",
         headers: {
@@ -47,19 +55,21 @@ const SignupScreen = ({ navigation }) => {
 
       const data = await res.json();
       console.log("The returned data is: ", data);
-      navigation.navigate("SignIn");
+      setTimeout(() => {
+        navigation.navigate("SignIn");
+        setCustomMessage("");
+      }, 5000);
+      setTimeout(() => {
+        setLoading(false);
+        setCustomMessage("User Registered successfully");
+      }, 2000);
     } catch (err) {
+      setLoading(false);
+      setCustomMessage("Invalid Email Id or Password");
+      setTimeout(() => {
+        setCustomMessage("");
+      }, 2000);
       console.log("The error is: ", err);
-    }
-  }
-
-  function handleSubmit() {
-    if (userName.length === 0 || email.length === 0 || password.length === 0 || phone.length === 0) {
-      console.log("The length of some field is zero.");
-      return;
-    } else {
-      console.log("The length of each field is greater than 0");
-      handleRegisterRequest();
     }
   }
 
@@ -77,11 +87,12 @@ const SignupScreen = ({ navigation }) => {
         <TextInput placeholder="Phone " className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={phone} onChangeText={(text) => setPhone(text)}></TextInput>
         <View className='w-full flex items-center gap-y-6'>
           <TouchableOpacity className={`w-full py-4 rounded-xl items-center ${pressed ? "bg-green-500" : "bg-green-600"}`} onPressIn={() => setPressed(true)} onPressOut={() => setPressed(false)} activeOpacity={0.8} onPress={() => handleSubmit()}>
-            <Text className='text-white text-2xl font-medium tracking-wider'>Submit</Text>
+            {loading ? (<Text><Spinner /></Text>) : (<Text className='text-white text-2xl font-medium tracking-wider'>Submit</Text>)}
           </TouchableOpacity>
           <View>
             <Text className='text-white tracking-wider text-xl'>Alreay a User ? <Text className='text-green-600 tracking-widest' onPress={() => handleNavigation()}>SignIn</Text></Text>
           </View>
+          {customMessage ? (<View><Text className='text-white text-xl'>{customMessage}</Text></View>) : (<Text></Text>)}
         </View>
       </View>
     </View>
