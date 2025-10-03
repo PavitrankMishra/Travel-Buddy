@@ -75,7 +75,7 @@ const HomeScreen = ({ navigation, route }) => {
     setShowForm(true);
   }
 
-  // Function that deletes the already added city
+  // Function that deletes a city from visited cities
   const handleDelete = () => {
     // setCityData((prev) => prev.filter((c) => c._id !== selectedCity._id))
     setShowForm(false);
@@ -177,7 +177,7 @@ const HomeScreen = ({ navigation, route }) => {
       </MapView>
       {formVisible && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId={userId} selectedCountry={selectedCountry} formVisible={formVisible} setFormVisible={setFormVisible} />
+          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId={userId} selectedCountry={selectedCountry} formVisible={formVisible} setFormVisible={setFormVisible} fetchCitiesList={fetchCitiesList}/>
         </View>
       )}
 

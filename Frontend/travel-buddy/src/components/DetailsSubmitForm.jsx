@@ -8,6 +8,7 @@ const DetailsSubmitForm = ({
   selectedCountry,
   formVisible,
   setFormVisible,
+  fetchCitiesList
 }) => {
   // State that stores the description
   const [description, setDescription] = useState("");
@@ -33,6 +34,8 @@ const DetailsSubmitForm = ({
 
       const data = await res.json();
       console.log(data);
+      fetchCitiesList();
+      setFormVisible(false);
     } catch (err) {
       console.log(err);
     }
