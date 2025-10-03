@@ -6,25 +6,27 @@ const DetailsSubmitForm = ({
   selectedCity,
   userId,
   selectedCountry,
+  formVisible,
+  setFormVisible,
 }) => {
-  useEffect(() => {
-    console.log("The marker coordinates are: ", markerCoordinates);
-    console.log(markerCoordinates.latitude);
-    console.log(markerCoordinates.longitude);
-    console.log("The user id is: ", userId);
-    console.log("The selected country is: ", selectedCountry);
-  }, []);
-
+  // State that stores the description
   const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    setDescription("");
+  }, [markerCoordinates]);
   const submitForm = async (sentData) => {
     try {
-      const res = await fetch("https://travel-buddy-r69f.onrender.com/api/v1/cities/addCity", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(sentData)
-      });
+      const res = await fetch(
+        "https://travel-buddy-r69f.onrender.com/api/v1/cities/addCity",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(sentData),
+        }
+      );
       if (!res.ok) {
         throw new Error("Response as not ok");
       }
@@ -96,9 +98,22 @@ const DetailsSubmitForm = ({
         value={markerCoordinates.longitude.toFixed(4).toString()}
       ></TextInput> */}
       <View className="w-[90%] rounded-lg">
-        <TouchableOpacity className="bg-green-600 h-10 flex items-center justify-center rounded-lg" onPress={() => handleCitySubmit()}>
+        <TouchableOpacity
+          className="bg-green-600 h-10 flex items-center justify-center rounded-lg"
+          onPress={() => handleCitySubmit()}
+        >
           <Text className="text-white text-center text-xl tracking-widest">
             Add City
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View className="w-[90%] rounded-lg">
+        <TouchableOpacity
+          className="bg-green-600 h-10 flex items-center justify-center rounded-lg"
+          onPress={() => setFormVisible(false)}
+        >
+          <Text className="text-white text-center text-xl tracking-widest">
+            Cancel
           </Text>
         </TouchableOpacity>
       </View>
