@@ -15,7 +15,7 @@ const DetailsSubmitForm = ({
   success,
   setSuccess,
   error,
-  setError, 
+  setError,
   errorMessage,
   setErrorMessage,
   successMessage,
@@ -27,6 +27,8 @@ const DetailsSubmitForm = ({
   useEffect(() => {
     setDescription("");
   }, [markerCoordinates]);
+
+  
   const submitForm = async (sentData) => {
     try {
       setAddCityLoading(true);
@@ -75,11 +77,12 @@ const DetailsSubmitForm = ({
 
   const handleCitySubmit = () => {
     if (selectedCity.length < 0 || description.length < 0) {
-      console.log("This will be called because the length is less than 0");
+      setError(true);
+      setAddCityForm(false);
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
     } else {
-      console.log(
-        "This will be clicked because the length is greater than zero"
-      );
       const sentData = {
         userId: userId,
         visitedCities: [
@@ -93,8 +96,6 @@ const DetailsSubmitForm = ({
           },
         ],
       };
-
-      console.log("The sent data is: ", sentData);
       submitForm(sentData);
     }
   };
@@ -120,25 +121,13 @@ const DetailsSubmitForm = ({
         placeholderTextColor="white"
         defaultValue={new Date().toISOString().split("T")[0]}
       ></TextInput>
-      {/* <TextInput
-        placeholder="Latitude"
-        className="border border-gray-400 w-[90%] items-center justify-center text-white tracking-widest rounded-lg pl-4 text-xl"
-        placeholderTextColor="white"
-        value={markerCoordinates.latitude.toFixed(4).toString()}
-      ></TextInput>
-      <TextInput
-        placeholder="Longitude"
-        className="border border-gray-400 w-[90%] items-center justify-center text-white tracking-widest rounded-lg pl-4 text-xl"
-        placeholderTextColor="white"
-        value={markerCoordinates.longitude.toFixed(4).toString()}
-      ></TextInput> */}
       <View className="w-[90%] rounded-lg">
         <TouchableOpacity
-          className="bg-green-600 h-10 flex items-center justify-center rounded-lg"
+          className="bg-green-600 flex items-center justify-center rounded-lg h-12"
           onPress={() => handleCitySubmit()}
         >
           {!addCityLoading ? (
-            <Text className="text-white text-center text-xl tracking-widest">
+            <Text className="text-white text-center text-xl tracking-widest py-3">
               Add City
             </Text>
           ) : (
@@ -148,10 +137,10 @@ const DetailsSubmitForm = ({
       </View>
       <View className="w-[90%] rounded-lg">
         <TouchableOpacity
-          className="bg-green-600 h-10 flex items-center justify-center rounded-lg"
+          className="bg-green-600 flex items-center justify-center rounded-lg h-12"
           onPress={() => setAddCityForm(false)}
         >
-          <Text className="text-white text-center text-xl tracking-widest">
+          <Text className="text-white text-center text-xl tracking-widest py-3">
             Cancel
           </Text>
         </TouchableOpacity>
