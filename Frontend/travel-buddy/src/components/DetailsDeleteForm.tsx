@@ -15,12 +15,14 @@ const DetailsDeleteForm = ({
   setDeleteCityForm,
   fetchCitiesList,
   success,
-  setSuccess
+  setSuccess,
+  error,
+  setError
 }) => {
   const handleCityDelete = async (userId: string, cityId: string) => {
-    console.log("The user id is: ", userId);
-    console.log("The city id is: ", cityId);
-    console.log("This is called");
+    // console.log("The user id is: ", userId);
+    // console.log("The city id is: ", cityId);
+    // console.log("This is called");
     try {
       setDeleteCityLoading(true);
       const res = await fetch(
@@ -54,7 +56,14 @@ const DetailsDeleteForm = ({
     } catch (err) {
       console.error("Error in deleting city:", err);
       setDeleteCityLoading(false);
-      setDeleteCityForm(false);
+      setTimeout(() => {
+        setDeleteCityForm(false);
+        setError(false);
+      }, 2000);
+
+      setTimeout(() => {
+        setError(false);
+      }, 5000);
     }
   };
 

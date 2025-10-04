@@ -63,6 +63,8 @@ const HomeScreen = ({ navigation, route }) => {
 
   const [success, setSuccess] = useState(false);
 
+  const [error, setError] = useState(false);
+
   useEffect(() => {
     setUserId(userData.user._id);
   }, [userData]);
@@ -143,6 +145,8 @@ const HomeScreen = ({ navigation, route }) => {
     // State that displays city add form
     setAddCityForm(true);
 
+    setDeleteCityForm(false);
+
     // Access address of the selected location
     let [address] = await Location.reverseGeocodeAsync({ latitude, longitude });
 
@@ -180,13 +184,13 @@ const HomeScreen = ({ navigation, route }) => {
       </MapView>
       {addCityForm && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} fetchCitiesList={fetchCitiesList} addCityLoading={addCityLoading} addCityForm={addCityForm} setAddCityLoading={setAddCityLoading} setAddCityForm={setAddCityForm} success={success} setSuccess = {setSuccess}/>
+          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} fetchCitiesList={fetchCitiesList} addCityLoading={addCityLoading} addCityForm={addCityForm} setAddCityLoading={setAddCityLoading} setAddCityForm={setAddCityForm} success={success} setSuccess={setSuccess} error={error} setError={setError} />
         </View>
       )}
 
       {deleteCityForm && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsDeleteForm markerCoordinates={markerCoordinates} currentCity={currentCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} currentDescription={currentDescription} deleteCityLoading={deleteCityLoading} deleteCityForm={deleteCityForm} setDeleteCityLoading={setDeleteCityLoading} setDeleteCityForm={setDeleteCityForm} fetchCitiesList={fetchCitiesList} success={success} setSuccess={setSuccess} />
+          <DetailsDeleteForm markerCoordinates={markerCoordinates} currentCity={currentCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} currentDescription={currentDescription} deleteCityLoading={deleteCityLoading} deleteCityForm={deleteCityForm} setDeleteCityLoading={setDeleteCityLoading} setDeleteCityForm={setDeleteCityForm} fetchCitiesList={fetchCitiesList} success={success} setSuccess={setSuccess} error={error} setError={setError} />
         </View>
       )}
 
@@ -195,6 +199,13 @@ const HomeScreen = ({ navigation, route }) => {
           <Text className='text-green-600 tracking-widest text-2xl '>Success</Text>
         </View>
       )}
+
+      {error && (
+        <View style={{ position: 'absolute', bottom: 50, left: -5 }} className='rounded-lg bg-red-200 w-[200] h-12 flex justify-center items-center border-2 border-red-600'>
+          <Text className='text-red-600 tracking-widest text-2xl'>Error</Text>
+        </View>
+      )}
+
       <View style={{ position: 'absolute', bottom: 50, right: 20 }}>
         <TouchableOpacity onPress={() => handleZoom(true)} style={{ marginBottom: 10 }}>
           <FontAwesome name="search-plus" size={40} color="black" />

@@ -13,7 +13,9 @@ const DetailsSubmitForm = ({
   addCityForm,
   setAddCityForm,
   success,
-  setSuccess
+  setSuccess,
+  error,
+  setError
 }) => {
   // State that stores the description
   const [description, setDescription] = useState("");
@@ -52,7 +54,12 @@ const DetailsSubmitForm = ({
       setAddCityLoading(false);
       setTimeout(() => {
         setAddCityForm(false);
+        setError(true);
       }, 2000);
+
+      setTimeout(() => {
+        setError(false);
+      }, 5000);
       console.log(err);
     }
   };
