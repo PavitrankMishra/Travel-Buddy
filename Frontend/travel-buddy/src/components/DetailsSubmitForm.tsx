@@ -1,14 +1,17 @@
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
+import Spinner from "./Spinner";
 
 const DetailsSubmitForm = ({
   markerCoordinates,
   selectedCity,
   userId,
   selectedCountry,
-  formVisible,
-  setFormVisible,
-  fetchCitiesList
+  fetchCitiesList,
+  addCityLoading,
+  setAddCityLoading,
+  addCityForm,
+  setAddCityForm,
 }) => {
   // State that stores the description
   const [description, setDescription] = useState("");
@@ -18,6 +21,7 @@ const DetailsSubmitForm = ({
   }, [markerCoordinates]);
   const submitForm = async (sentData) => {
     try {
+      setAddCityLoading(true);
       const res = await fetch(
         "https://travel-buddy-r69f.onrender.com/api/v1/cities/addCity",
         {
@@ -32,11 +36,17 @@ const DetailsSubmitForm = ({
         throw new Error("Response as not ok");
       }
 
+      setTimeout(() => {
+        setAddCityLoading(false);
+        setAddCityForm(false);
+      }, 2000);
       const data = await res.json();
-      console.log(data);
       fetchCitiesList();
-      setFormVisible(false);
     } catch (err) {
+      setAddCityLoading(false);
+      setTimeout(() => {
+        setAddCityForm(false);
+      }, 2000);
       console.log(err);
     }
   };
@@ -105,15 +115,19 @@ const DetailsSubmitForm = ({
           className="bg-green-600 h-10 flex items-center justify-center rounded-lg"
           onPress={() => handleCitySubmit()}
         >
-          <Text className="text-white text-center text-xl tracking-widest">
-            Add City
-          </Text>
+          {!addCityLoading ? (
+            <Text className="text-white text-center text-xl tracking-widest">
+              Add City
+            </Text>
+          ) : (
+            <Spinner />
+          )}
         </TouchableOpacity>
       </View>
       <View className="w-[90%] rounded-lg">
         <TouchableOpacity
           className="bg-green-600 h-10 flex items-center justify-center rounded-lg"
-          onPress={() => setFormVisible(false)}
+          onPress={() => setAddCityForm(false)}
         >
           <Text className="text-white text-center text-xl tracking-widest">
             Cancel

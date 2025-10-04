@@ -29,6 +29,18 @@ const HomeScreen = ({ navigation, route }) => {
     longitudeDelta: 0.05,
   });
 
+  // Loading state for city delete
+  const [deleteCityLoading, setDeleteCityLoading] = useState(false);
+
+  // State to toggle delete city form display
+  const [deleteCityForm, setDeleteCityForm] = useState(false);
+
+  // Loading state for city add
+  const [addCityLoading, setAddCityLoading] = useState(false);
+
+  // State to toggle add city form display
+  const [addCityForm, setAddCityForm] = useState(false);
+
   // State that stores the country of the selected marker
   const [selectedCountry, setSelectedCountry] = useState();
 
@@ -37,12 +49,6 @@ const HomeScreen = ({ navigation, route }) => {
 
   // State that stores the visitedCities of the logged in user
   const [cityData, setCityData] = useState<City[]>([]);
-
-  // State that toggles visibility of the add city form
-  const [formVisible, setFormVisible] = useState(false);
-
-  // State that toggles visiblity of the delete city form
-  const [showForm, setShowForm] = useState(false);
 
   // State that contains the name of the visited city
   const [currentCity, setCurrentCity] = useState("");
@@ -72,49 +78,12 @@ const HomeScreen = ({ navigation, route }) => {
     setCurrentCity(c.cityName);
     setCurrentDescription(c.notes);
     setSelectedCityId(c._id);
-    console.log("On marker press ", c.cityName);
-    console.log("The current description is: ", currentDescription);
-
-    // Sets the deletes city form to be visible
-    setShowForm(true);
+    setDeleteCityForm(true);
   }
 
-  const handleCityDelete = async (userId: string, cityId: string) => {
-    console.log(userId);
-    console.log(cityId);
-    try {
-      const res = await fetch(
-        `https://travel-buddy-r69f.onrender.com/api/v1/cities/${userId}/${cityId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        console.error("Delete failed:", data.message);
-        return;
-      }
-
-      console.log("City deleted successfully:", data);
-
-      fetchCitiesList();
-    } catch (err) {
-      console.error("Error in deleting city:", err);
-    }
-  };
-
-  // Function that deletes a city from visited cities
-  const handleDelete = () => {
-    handleCityDelete(userId, selectedCityId);
-    // setCityData((prev) => prev.filter((c) => c._id !== selectedCity._id))
-    setShowForm(false);
-    setCurrentCity(null);
-  }
+  useEffect(() => {
+    console.log(selectedCityId);
+  }, [selectedCityId]);
 
   // Function that fetch data of the visitedCities according to userId
   const fetchCitiesList = async () => {
@@ -169,11 +138,8 @@ const HomeScreen = ({ navigation, route }) => {
     // State that sets the current latitude and longitude coordinates  
     setMarkerCoordinates({ latitude, longitude });
 
-    // State that hides city delete form
-    setShowForm(false);
-
     // State that displays city add form
-    setFormVisible(true);
+    setAddCityForm(true);
 
     // Access address of the selected location
     let [address] = await Location.reverseGeocodeAsync({ latitude, longitude });
@@ -206,19 +172,19 @@ const HomeScreen = ({ navigation, route }) => {
             </>
           )
         })}
-        {formVisible && markerCoordinates && <Marker coordinate={markerCoordinates} />}
-        
+        {addCityForm && markerCoordinates && <Marker coordinate={markerCoordinates} />}
+
 
       </MapView>
-      {formVisible && (
+      {addCityForm && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId={userId} selectedCountry={selectedCountry} formVisible={formVisible} setFormVisible={setFormVisible} fetchCitiesList={fetchCitiesList} />
+          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} fetchCitiesList={fetchCitiesList} addCityLoading={addCityLoading} addCityForm={addCityForm} setAddCityLoading={setAddCityLoading} setAddCityForm={setAddCityForm} />
         </View>
       )}
 
-      {showForm && (
+      {deleteCityForm && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsDeleteForm handleDelete={handleDelete} showForm={showForm} setShowForm={setShowForm} markerCoordinates={markerCoordinates} currentCity={currentCity} userId={userId} selectedCountry={selectedCountry} currentDescription={currentDescription} />
+          <DetailsDeleteForm markerCoordinates={markerCoordinates} currentCity={currentCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} currentDescription={currentDescription} deleteCityLoading={deleteCityLoading} deleteCityForm={deleteCityForm} setDeleteCityLoading={setDeleteCityLoading} setDeleteCityForm={setDeleteCityForm} fetchCitiesList={fetchCitiesList} />
         </View>
       )}
 
