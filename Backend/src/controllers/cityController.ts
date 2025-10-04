@@ -15,6 +15,39 @@ const addCityController = async (req: Request, res: Response) => {
             });
         }
 
+        for (const city of visitedCities) {
+            if (!city.cityName) {
+                return res.status(400).json({
+                    success: false,
+                    message: "City name required"
+                });
+            } else if (!city.country) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Country required"
+                });
+            } else if (!city.notes) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Notes required",
+                });
+            } else if (!city.visitedOn) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Date required",
+                });
+            } else if (!city.lat) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Latitude required",
+                });
+            } else if (!city.lng) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Longitude required"
+                })
+            }
+        }
         let userCities = await cityModel.findOne({ userId });
 
         if (userCities) {
@@ -45,16 +78,16 @@ const addCityController = async (req: Request, res: Response) => {
 // Get the list of the city from the user || GET
 const getUserCityController = async (req: Request, res: Response) => {
     try {
-        const {userId} = req.params;
-        if(!userId) {
+        const { userId } = req.params;
+        if (!userId) {
             return res.status(400).json({
-                success:false,
+                success: false,
                 message: "UserId is required"
             })
         }
 
-        const userCities = await cityModel.findOne({userId});
-        if(!userCities) {
+        const userCities = await cityModel.findOne({ userId });
+        if (!userCities) {
             return res.status(404).json({
                 success: false,
                 message: "No cities found for this user",
@@ -79,18 +112,23 @@ const deleteCityController = async (req: Request, res: Response) => {
     try {
         const { userId, cityId } = req.params;
 
-        if (!userId || !cityId) {
+        if (!userId) {
             return res.status(400).json({
                 success: false,
-                message: "UserId and CityId are required"
+                message: "UserId required"
             });
+        } else if (!cityId) {
+            return res.status(400).json({
+                success: false,
+                message: "City Id required"
+            })
         }
 
         // Use MongoDB $pull to remove the city
         const updatedUserCities = await cityModel.findOneAndUpdate(
             { userId },
             { $pull: { visitedCities: { _id: cityId } } },
-            { new: true } // return updated document
+            { new: true }
         );
 
         if (!updatedUserCities) {
