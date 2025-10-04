@@ -65,6 +65,10 @@ const HomeScreen = ({ navigation, route }) => {
 
   const [error, setError] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [successMessage, setSuccessMessage] = useState("");
+
   useEffect(() => {
     setUserId(userData.user._id);
   }, [userData]);
@@ -184,25 +188,25 @@ const HomeScreen = ({ navigation, route }) => {
       </MapView>
       {addCityForm && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} fetchCitiesList={fetchCitiesList} addCityLoading={addCityLoading} addCityForm={addCityForm} setAddCityLoading={setAddCityLoading} setAddCityForm={setAddCityForm} success={success} setSuccess={setSuccess} error={error} setError={setError} />
+          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} fetchCitiesList={fetchCitiesList} addCityLoading={addCityLoading} addCityForm={addCityForm} setAddCityLoading={setAddCityLoading} setAddCityForm={setAddCityForm} success={success} setSuccess={setSuccess} error={error} setError={setError} errorMessage={errorMessage} setErrorMessage={setErrorMessage} successMessage={successMessage} setSuccessMessage={setSuccessMessage} />
         </View>
       )}
 
       {deleteCityForm && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsDeleteForm markerCoordinates={markerCoordinates} currentCity={currentCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} currentDescription={currentDescription} deleteCityLoading={deleteCityLoading} deleteCityForm={deleteCityForm} setDeleteCityLoading={setDeleteCityLoading} setDeleteCityForm={setDeleteCityForm} fetchCitiesList={fetchCitiesList} success={success} setSuccess={setSuccess} error={error} setError={setError} />
+          <DetailsDeleteForm markerCoordinates={markerCoordinates} currentCity={currentCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} currentDescription={currentDescription} deleteCityLoading={deleteCityLoading} deleteCityForm={deleteCityForm} setDeleteCityLoading={setDeleteCityLoading} setDeleteCityForm={setDeleteCityForm} fetchCitiesList={fetchCitiesList} success={success} setSuccess={setSuccess} error={error} setError={setError} errorMessage={errorMessage} setErrorMessage={setErrorMessage} successMessage={successMessage} setSuccessMessage={setSuccessMessage} />
         </View>
       )}
 
       {success && (
         <View style={{ position: 'absolute', bottom: 50, left: -5 }} className='rounded-lg bg-green-200 w-[200] h-12 flex justify-center items-center border-2 border-green-600'>
-          <Text className='text-green-600 tracking-widest text-2xl '>Success</Text>
+          <Text className='text-green-600 tracking-widest text-2xl '>{successMessage}</Text>
         </View>
       )}
 
       {error && (
         <View style={{ position: 'absolute', bottom: 50, left: -5 }} className='rounded-lg bg-red-200 w-[200] h-12 flex justify-center items-center border-2 border-red-600'>
-          <Text className='text-red-600 tracking-widest text-2xl'>Error</Text>
+          <Text className='text-red-600 tracking-widest text-2xl'>{errorMessage}</Text>
         </View>
       )}
 

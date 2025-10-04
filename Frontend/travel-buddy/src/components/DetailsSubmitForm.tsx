@@ -15,7 +15,11 @@ const DetailsSubmitForm = ({
   success,
   setSuccess,
   error,
-  setError
+  setError, 
+  errorMessage,
+  setErrorMessage,
+  successMessage,
+  setSuccessMessage
 }) => {
   // State that stores the description
   const [description, setDescription] = useState("");
@@ -36,22 +40,26 @@ const DetailsSubmitForm = ({
           body: JSON.stringify(sentData),
         }
       );
-      if (!res.ok) {
-        throw new Error("Response as not ok");
-      }
 
-      setTimeout(() => {
-        setAddCityLoading(false);
-        setAddCityForm(false);
-        setSuccess(true);
-      }, 2000);
       const data = await res.json();
-      fetchCitiesList();
-      setTimeout(() => {
-        setSuccess(false);
-      }, 5000);
+      if (data.success === false) {
+        throw new Error(data.message);
+      } else {
+        setSuccessMessage(data.message);
+        setTimeout(() => {
+          setAddCityLoading(false);
+          setAddCityForm(false);
+          setSuccess(true);
+        }, 2000);
+        fetchCitiesList();
+        setTimeout(() => {
+          setSuccess(false);
+          setSuccessMessage("");
+        }, 5000);
+      }
     } catch (err) {
       setAddCityLoading(false);
+      setErrorMessage(err.message);
       setTimeout(() => {
         setAddCityForm(false);
         setError(true);
@@ -59,6 +67,7 @@ const DetailsSubmitForm = ({
 
       setTimeout(() => {
         setError(false);
+        setErrorMessage("");
       }, 5000);
       console.log(err);
     }
