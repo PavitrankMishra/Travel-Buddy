@@ -8,8 +8,7 @@ const SigninScreen = ({ navigation }) => {
     const [passwordValue, setPasswordValue] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [customerErroMessage, setCustomErrorMessage] = useState("");
-    console.log(pressed);
+    const [customErrorMessage, setCustomErrorMessage] = useState("");
     function handleNavigation() {
         navigation.navigate("SignUp");
     };
@@ -39,21 +38,18 @@ const SigninScreen = ({ navigation }) => {
                 }),
             });
 
-            if (!res.ok) {
-                throw new Error("Response was not ok");
-            }
-
-            setTimeout(() => {
-                setLoading(false);
-            }, 1000);
-
             const data = await res.json();
-            console.log("Response: ", data);
-            navigation.navigate("Home", { userData: data });
+            if (data.success === true) {
+                setTimeout(() => {
+                    setLoading(false);
+                    navigation.navigate("Home", { userData: data });
+                }, 1000);
+            } else {
+                throw new Error(data.message);
+            }
         } catch (e) {
-            console.log("The error is: ", e);
             setError(true);
-            setCustomErrorMessage("Invalid Email Id or Password")
+            setCustomErrorMessage(e.message);
             setTimeout(() => {
                 setError(false);
             }, 3000);
@@ -61,22 +57,19 @@ const SigninScreen = ({ navigation }) => {
         }
     }
 
-    console.log(emailValue);
-    console.log(passwordValue);
     return (
         <View className='bg-white h-full w-full '>
-            <View className='h-[100%] w-full -bg--color-dark--1 justify-start items-center pt-20 '>
-                <View className='flex justify-center items-center gap-y-10 py-12 '>
+            <View className='h-[100%] w-full -bg--color-dark--1 justify-start items-center pt-20'>
+                <View className='flex justify-center items-center gap-y-8  '>
                     <Image className='h-[100] w-[105] ' source={require('../assets/Logo.png')}></Image>
-                    <Text className='text-white text-3xl text-semibold tracking-widest'>Travel. Note. Remember</Text>
+                    <Text className='text-white text-2xl text-semibold tracking-widest'>Travel. Note. Remember</Text>
                 </View>
-                {/* {true && <Spinner />} */}
-                <View className='w-[80%] flex gap-y-10 items-center justify-center'>
-                    <Text className='text-white text-3xl border-b-4 border-green-600 w-full  rounded-2xl text-center pb-2'>LOGIN</Text>
-                    <TextInput placeholder="Enter your email" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={emailValue} onChangeText={(text) => handleEmailInput(text)}></TextInput>
-                    <TextInput placeholder="Enter your Password" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={passwordValue} onChangeText={(text) => handlePasswordInput(text)}></TextInput>
+                <View className='w-[80%] flex items-center justify-center gap-y-8 pt-8 '>
+                    <Text className='text-white text-2xl border-b-4 border-green-600 w-full  rounded-2xl text-center pb-2'>LOGIN</Text>
+                    <TextInput placeholder="Enter your email" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={emailValue} onChangeText={(text) => handleEmailInput(text)}></TextInput>
+                    <TextInput placeholder="Enter your Password" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={passwordValue} onChangeText={(text) => handlePasswordInput(text)}></TextInput>
                     <View className='w-full flex items-center gap-y-6'>
-                        <TouchableOpacity className={`w-full py-4 rounded-xl items-center ${pressed ? "bg-green-500" : "bg-green-600"}`} onPressIn={() => {
+                        <TouchableOpacity className={`w-full py-3 rounded-xl items-center ${pressed ? "bg-green-500" : "bg-green-600"}`} onPressIn={() => {
                             setPressed(true)
                         }
                         } onPressOut={() => setPressed(false)} activeOpacity={0.8} onPress={() => handleSignIn()}>
@@ -88,7 +81,7 @@ const SigninScreen = ({ navigation }) => {
                         <View>
                             <Text className='text-white tracking-wider text-xl'>New User ? <Text className='text-green-600 tracking-widest' onPress={() => handleNavigation()}>Register</Text></Text>
                         </View>
-                        {error ? (<View><Text className='text-white tracking-wider text-xl'>{customerErroMessage}</Text></View>) : (<Text></Text>)}
+                        {error ? (<View><Text className='text-white tracking-wider text-xl text-center'>{customErrorMessage}</Text></View>) : (<Text></Text>)}
                     </View>
                 </View>
             </View>

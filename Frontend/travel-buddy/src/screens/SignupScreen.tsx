@@ -34,7 +34,7 @@ const SignupScreen = ({ navigation }) => {
       setLoading(true);
       if (userName.length === 0 || email.length === 0 || password.length === 0 || phone.length === 0) {
         setLoading(false);
-        throw new Error("Invalid email id or password");
+        throw new Error("All fields are required");
       }
       const res = await fetch("https://travel-buddy-r69f.onrender.com/api/v1/auth/register", {
         method: "POST",
@@ -49,23 +49,22 @@ const SignupScreen = ({ navigation }) => {
         })
       });
 
-      if (!res.ok) {
-        throw new Error("Response was not ok");
-      }
-
       const data = await res.json();
-      console.log("The returned data is: ", data);
-      setTimeout(() => {
-        navigation.navigate("SignIn");
-        setCustomMessage("");
-      }, 5000);
-      setTimeout(() => {
-        setLoading(false);
-        setCustomMessage("User Registered successfully");
-      }, 2000);
+      if (data.success === true) {
+        setTimeout(() => {
+          navigation.navigate("SignIn");
+          setCustomMessage("");
+        }, 5000);
+        setTimeout(() => {
+          setLoading(false);
+          setCustomMessage("User Registered successfully");
+        }, 2000);
+      } else {
+        throw new Error(data.message);
+      }
     } catch (err) {
       setLoading(false);
-      setCustomMessage("Invalid Email Id or Password");
+      setCustomMessage(err.message);
       setTimeout(() => {
         setCustomMessage("");
       }, 2000);
@@ -74,19 +73,19 @@ const SignupScreen = ({ navigation }) => {
   }
 
   return (
-    <View className='h-full w-full -bg--color-dark--1 flex items-center pt-12'>
-      <View className='flex justify-center items-center gap-y-10 py-12 pt-20'>
-        <Image className='h-[100] w-[105] ' source={require('../assets/Logo.png')}></Image>
-        <Text className='text-white text-3xl text-semibold tracking-widest'>Travel. Note. Remember</Text>
+    <View className='h-full w-full -bg--color-dark--1 flex items-center pt-20'>
+      <View className='flex justify-center items-center gap-y-8'>
+        <Image className='h-[100] w-[105]' source={require('../assets/Logo.png')}></Image>
+        <Text className='text-white text-2xl text-semibold tracking-widest'>Travel. Note. Remember</Text>
       </View>
-      <View className='w-[80%] flex gap-y-10 items-center justify-center'>
-        <Text className='text-white text-3xl border-b-4 border-green-600 w-full text-center rounded-2xl pb-2'>REGISTER</Text>
-        <TextInput placeholder="Username" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={userName} onChangeText={(text) => handleUserNameInput(text)}></TextInput>
-        <TextInput placeholder="Email" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={email} onChangeText={(text) => handleEmailInput(text)}></TextInput>
-        <TextInput placeholder="Password" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={password} onChangeText={(text) => handlePasswordInput(text)}></TextInput>
-        <TextInput placeholder="Phone " className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-2xl' placeholderTextColor="#999" value={phone} onChangeText={(text) => setPhone(text)}></TextInput>
+      <View className='w-[80%] flex gap-y-8 items-center justify-center pt-8'>
+        <Text className='text-white text-2xl border-b-4 border-green-600 w-full text-center rounded-2xl pb-2'>REGISTER</Text>
+        <TextInput placeholder="Username" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={userName} onChangeText={(text) => handleUserNameInput(text)}></TextInput>
+        <TextInput placeholder="Email" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={email} onChangeText={(text) => handleEmailInput(text)}></TextInput>
+        <TextInput placeholder="Password" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={password} onChangeText={(text) => handlePasswordInput(text)}></TextInput>
+        <TextInput placeholder="Phone " className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={phone} onChangeText={(text) => setPhone(text)}></TextInput>
         <View className='w-full flex items-center gap-y-6'>
-          <TouchableOpacity className={`w-full py-4 rounded-xl items-center ${pressed ? "bg-green-500" : "bg-green-600"}`} onPressIn={() => setPressed(true)} onPressOut={() => setPressed(false)} activeOpacity={0.8} onPress={() => handleSubmit()}>
+          <TouchableOpacity className={`w-full py-3 rounded-xl items-center ${pressed ? "bg-green-500" : "bg-green-600"}`} onPressIn={() => setPressed(true)} onPressOut={() => setPressed(false)} activeOpacity={0.8} onPress={() => handleSubmit()}>
             {loading ? (<Text><Spinner /></Text>) : (<Text className='text-white text-2xl font-medium tracking-wider'>Submit</Text>)}
           </TouchableOpacity>
           <View>
