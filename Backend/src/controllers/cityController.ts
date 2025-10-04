@@ -108,6 +108,7 @@ const getUserCityController = async (req: Request, res: Response) => {
     }
 }
 
+// Delete city of a particular user || DELETE
 const deleteCityController = async (req: Request, res: Response) => {
     try {
         const { userId, cityId } = req.params;
