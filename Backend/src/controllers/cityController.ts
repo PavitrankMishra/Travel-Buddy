@@ -63,7 +63,7 @@ const addCityController = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             success: true,
-            message: "City added successfully",
+            message: "Success",
             data: userCities
         });
     } catch (err) {
@@ -141,7 +141,7 @@ const deleteCityController = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             success: true,
-            message: "City deleted successfully",
+            message: "Success",
             data: updatedUserCities
         });
     } catch (err) {
