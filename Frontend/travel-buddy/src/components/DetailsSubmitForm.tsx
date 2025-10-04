@@ -12,6 +12,8 @@ const DetailsSubmitForm = ({
   setAddCityLoading,
   addCityForm,
   setAddCityForm,
+  success,
+  setSuccess
 }) => {
   // State that stores the description
   const [description, setDescription] = useState("");
@@ -39,9 +41,13 @@ const DetailsSubmitForm = ({
       setTimeout(() => {
         setAddCityLoading(false);
         setAddCityForm(false);
+        setSuccess(true);
       }, 2000);
       const data = await res.json();
       fetchCitiesList();
+      setTimeout(() => {
+        setSuccess(false);
+      }, 5000);
     } catch (err) {
       setAddCityLoading(false);
       setTimeout(() => {

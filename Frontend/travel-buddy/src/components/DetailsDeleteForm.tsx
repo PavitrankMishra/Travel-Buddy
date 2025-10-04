@@ -13,7 +13,9 @@ const DetailsDeleteForm = ({
   deleteCityForm,
   setDeleteCityLoading,
   setDeleteCityForm,
-  fetchCitiesList
+  fetchCitiesList,
+  success,
+  setSuccess
 }) => {
   const handleCityDelete = async (userId: string, cityId: string) => {
     console.log("The user id is: ", userId);
@@ -41,10 +43,14 @@ const DetailsDeleteForm = ({
       setTimeout(() => {
         setDeleteCityLoading(false);
         setDeleteCityForm(false);
+        setSuccess(true);
       }, 2000);
       console.log("City deleted successfully:", data);
 
       fetchCitiesList();
+      setTimeout(() => {
+        setSuccess(false);
+      }, 5000);
     } catch (err) {
       console.error("Error in deleting city:", err);
       setDeleteCityLoading(false);
