@@ -15,12 +15,6 @@ const DetailsDeleteForm = ({
   setDeleteCityForm,
   fetchCitiesList
 }) => {
-  useEffect(() => {
-    console.log("The selected city is: ", currentCity);
-    console.log("The marekre coordinates are: ", markerCoordinates);
-    console.log("The value of delete city loading: ", deleteCityLoading);
-  }, []);
-
   const handleCityDelete = async (userId: string, cityId: string) => {
     console.log("The user id is: ", userId);
     console.log("The city id is: ", cityId);
