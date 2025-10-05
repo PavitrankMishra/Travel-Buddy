@@ -195,14 +195,14 @@ const HomeScreen = ({ navigation, route }) => {
       )}
 
       {success && (
-        <View style={{ position: 'absolute', bottom: 50, left: -5 }} className='rounded-lg bg-green-200 w-[200] h-12 flex justify-center items-center border-2 border-green-600'>
-          <Text className='text-green-600 tracking-widest text-2xl '>{successMessage}</Text>
+        <View style={{ position: 'absolute', bottom: 50, left: -5 }} className='rounded-lg bg-green-200 w-[250] h-12 flex justify-center items-center border-2 border-green-600'>
+          <Text className='text-green-600 tracking-widest text-xl '>{successMessage}</Text>
         </View>
       )}
 
       {error && (
-        <View style={{ position: 'absolute', bottom: 50, left: -5 }} className='rounded-lg bg-red-200 w-[200] h-12 flex justify-center items-center border-2 border-red-600'>
-          <Text className='text-red-600 tracking-widest text-2xl'>{errorMessage}</Text>
+        <View style={{ position: 'absolute', bottom: 50, left: -5 }} className='rounded-lg bg-red-200 w-[250] h-12 flex justify-center items-center border-2 border-red-600'>
+          <Text className='text-red-600 tracking-widest text-xl'>{errorMessage}</Text>
         </View>
       )}
 
