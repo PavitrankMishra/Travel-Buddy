@@ -56,23 +56,18 @@ const DetailsDeleteForm = ({
       }
 
     } catch (err) {
-      console.error("Error in deleting city:", err);
       setDeleteCityLoading(false);
       setErrorMessage(err.message);
-      setTimeout(() => {
-        setDeleteCityForm(false);
-        setError(false);
-      }, 2000);
-
+      setDeleteCityForm(false);
+      setError(false);
       setTimeout(() => {
         setError(false);
+        setErrorMessage("");
       }, 5000);
     }
   };
 
   function handleDelete() {
-    console.log("The user id is: ", userId);
-    console.log("The city id id: ", selectedCityId);
     if (selectedCityId) {
       handleCityDelete(userId, selectedCityId);
     }

@@ -28,7 +28,7 @@ const DetailsSubmitForm = ({
     setDescription("");
   }, [markerCoordinates]);
 
-  
+
   const submitForm = async (sentData) => {
     try {
       setAddCityLoading(true);
@@ -61,12 +61,9 @@ const DetailsSubmitForm = ({
       }
     } catch (err) {
       setAddCityLoading(false);
+      setAddCityForm(false);
       setErrorMessage(err.message);
-      setTimeout(() => {
-        setAddCityForm(false);
-        setError(true);
-      }, 2000);
-
+      setError(true);
       setTimeout(() => {
         setError(false);
         setErrorMessage("");
