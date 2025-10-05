@@ -171,20 +171,16 @@ const HomeScreen = ({ navigation, route }) => {
       >
         {cityData && cityData.length > 0 && cityData.map((c) => {
           return (
-            <>
-              <Marker
-                coordinate={{ latitude: c.lat, longitude: c.lng }}
-                title={c.cityName}
-                description={c.notes}
-                key={c._id}
-                onPress={() => handleMarkerPress(c)}
-              />
-            </>
+            <Marker
+              coordinate={{ latitude: c.lat, longitude: c.lng }}
+              title={c.cityName}
+              description={c.notes}
+              key={c._id}
+              onPress={() => handleMarkerPress(c)}
+            />
           )
         })}
         {addCityForm && markerCoordinates && <Marker coordinate={markerCoordinates} />}
-
-
       </MapView>
       {addCityForm && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
