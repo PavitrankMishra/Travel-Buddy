@@ -29,7 +29,7 @@ const addCityController = async (req: Request, res: Response) => {
             } else if (!city.notes) {
                 return res.status(400).json({
                     success: false,
-                    message: "Notes required",
+                    message: "Description Required",
                 });
             } else if (!city.visitedOn) {
                 return res.status(400).json({
