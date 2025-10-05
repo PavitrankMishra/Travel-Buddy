@@ -19,12 +19,12 @@ const addCityController = async (req: Request, res: Response) => {
             if (!city.cityName) {
                 return res.status(400).json({
                     success: false,
-                    message: "City name required"
+                    message: "City required"
                 });
             } else if (!city.country) {
                 return res.status(400).json({
                     success: false,
-                    message: "Country required"
+                    message: "Country Required"
                 });
             } else if (!city.notes) {
                 return res.status(400).json({
@@ -34,17 +34,17 @@ const addCityController = async (req: Request, res: Response) => {
             } else if (!city.visitedOn) {
                 return res.status(400).json({
                     success: false,
-                    message: "Date required",
+                    message: "Date Required",
                 });
             } else if (!city.lat) {
                 return res.status(400).json({
                     success: false,
-                    message: "Latitude required",
+                    message: "Latitude Required",
                 });
             } else if (!city.lng) {
                 return res.status(400).json({
                     success: false,
-                    message: "Longitude required"
+                    message: "Longitude Required"
                 })
             }
         }
