@@ -6,6 +6,9 @@ import * as Location from "expo-location";
 import DetailsSubmitForm from "../components/DetailsSubmitForm";
 import DetailsDeleteForm from "../components/DetailsDeleteForm";
 import Spinner from '../components/Spinner';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from '../store/store';
+import { fetchUserCities } from '../store/slice/UserCitySlice';
 
 type City = {
   _id: string;
@@ -18,8 +21,34 @@ type City = {
 };
 
 const HomeScreen = ({ navigation, route }) => {
+
+  // Gets the redux dispatch function
+  const dispatch = useDispatch<AppDispatch>();
+
+  // Displays success if value is true otherwise false
+  const cityAddSuccess = useSelector((state: any) => state.addCity.success);
+
+  // Contains the success message
+  const cityAddSuccessMessage = useSelector((state: any) => state.addCity.successMessage);
+
+  // Displays error if value is true otherwise false
+  const cityAddError = useSelector((state: any) => state.addCity.error);
+
+  // Contains the error message
+  const cityAddErrorMessage = useSelector((state: any) => state.addCity.errorMessage);
+
+  // Displays spinner if loading is true 
+  const cityAddLoading = useSelector((state: any) => state.addCity.loading);
+
+  const loginUserData = useSelector((state: any) => state.userLogin.loginUser);
+
+  useEffect(() => {
+    console.log(loginUserData);
+    console.log(loginUserData._id);
+  }, []);
+
   // Data of the user after successfull login
-  const { userData } = route.params;
+  // const { userData } = route.params;
 
   // State that defines the initial region of the map
   const [region, setRegion] = useState({
@@ -29,55 +58,42 @@ const HomeScreen = ({ navigation, route }) => {
     longitudeDelta: 0.05,
   });
 
-  // Loading state for city delete
-  const [deleteCityLoading, setDeleteCityLoading] = useState(false);
+  // Loading state for delete city
+  const [deleteCityLoading, setDeleteCityLoading] = useState<boolean>(false);
 
-  // State to toggle delete city form display
-  const [deleteCityForm, setDeleteCityForm] = useState(false);
-
-  // Loading state for city add
-  const [addCityLoading, setAddCityLoading] = useState(false);
+  // Display add city form when value is true
+  const [deleteCityForm, setDeleteCityForm] = useState<boolean>(false);
 
   // State to toggle add city form display
-  const [addCityForm, setAddCityForm] = useState(false);
+  const [addCityForm, setAddCityForm] = useState<boolean>(false);
 
   // State that stores the country of the selected marker
-  const [selectedCountry, setSelectedCountry] = useState();
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
 
   // State that stores the id of the logged in  user
-  const [userId, setUserId] = useState();
+  const [userId, setUserId] = useState<string>("");
 
-  // State that stores the visitedCities of the logged in user
-  const [cityData, setCityData] = useState<City[]>([]);
+  // State that contains the name of the selected visited city
+  const [currentCity, setCurrentCity] = useState<string>("");
 
-  // State that contains the name of the visited city
-  const [currentCity, setCurrentCity] = useState("");
+  // State that contains the description of the selected visited city
+  const [currentDescription, setCurrentDescription] = useState<string>("");
 
-  // State that contains the description of the visited city
-  const [currentDescription, setCurrentDescription] = useState("");
-
-  // State that contains the name of the new selected city
-  const [selectedCity, setSelectedCity] = useState("");
-
+  // State that contains the id of the selected city
   const [selectedCityId, setSelectedCityId] = useState("");
 
-  const [success, setSuccess] = useState(false);
+  const [selectedCity, setSelectedCity] = useState("");
+  // State that contains the coordinates of live location
+  const [currentCoords, setCurrentCoords] = useState<{ latitude: number | null, longitude: number | null }>({
+    latitude: null,
+    longitude: null,
+  });
 
-  const [error, setError] = useState(false);
-
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const [successMessage, setSuccessMessage] = useState("");
-
+  const userCity = useSelector((state: any) => state.userCity.data);
   useEffect(() => {
-    setUserId(userData.user._id);
-  }, [userData]);
-
-  useEffect(() => {
-    if (userId) {
-      fetchCitiesList();
-    }
-  }, [userId]);
+    dispatch(fetchUserCities(loginUserData._id));
+    console.log("The data od user cties is: ", userCity);
+  }, []);
 
   // Function that fires when a marker is pressed
   const handleMarkerPress = (c) => {
@@ -92,25 +108,6 @@ const HomeScreen = ({ navigation, route }) => {
   useEffect(() => {
     console.log(selectedCityId);
   }, [selectedCityId]);
-
-  // Function that fetch data of the visitedCities according to userId
-  const fetchCitiesList = async () => {
-    console.log("This is called");
-    try {
-      const res = await fetch(`https://travel-buddy-r69f.onrender.com/api/v1/cities/${userId}`);
-
-      if (!res.ok) {
-        throw new Error("Response was not ok");
-      }
-
-      const data = await res.json();
-      console.log("The data is: ", data);
-      console.log("City list is: ", data.data.visitedCities);
-      setCityData(data.data.visitedCities);
-    } catch (err) {
-      console.log("The response should be ", err);
-    }
-  }
 
   // State that sets the marker coordinates when map is clicked
   const [markerCoordinates, setMarkerCoordinates] = useState(null);
@@ -161,6 +158,38 @@ const HomeScreen = ({ navigation, route }) => {
     setSelectedCountry(address.country);
   };
 
+  const getMyCurrentLocation = async () => {
+    const { status } = await Location.getForegroundPermissionsAsync();
+    if (status !== "granted") {
+      const { status: newStatus } = await Location.requestForegroundPermissionsAsync();
+      if (newStatus !== "granted") {
+        alert("Permission denied to access location");
+        return;
+      }
+    }
+
+    const location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+    });
+
+    const { latitude, longitude } = location.coords;
+
+    // Update state
+    setCurrentCoords({ latitude, longitude });
+
+    // Update region directly using the fetched coordinates
+    setRegion((prevRegion) => ({
+      ...prevRegion,
+      latitude,
+      longitude,
+    }));
+  };
+
+  const cityDeleteError = useSelector((state: any) => state.deleteCity.error);
+  const cityDeleteSuccess = useSelector((state: any) => state.deleteCity.success);
+  const cityDeleteLoading = useSelector((state: any) => state.deleteCity.loading);
+  const cityDeleteMessage = useSelector((state: any) => state.deleteCity.message);
+
   return (
     <View style={{ flex: 1 }} >
       <MapView
@@ -169,7 +198,7 @@ const HomeScreen = ({ navigation, route }) => {
         onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
         onPress={handleMapPress}
       >
-        {cityData && cityData.length > 0 && cityData.map((c) => {
+        {userCity && userCity.length > 0 && userCity.map((c) => {
           return (
             <Marker
               coordinate={{ latitude: c.lat, longitude: c.lng }}
@@ -184,30 +213,39 @@ const HomeScreen = ({ navigation, route }) => {
       </MapView>
       {addCityForm && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} fetchCitiesList={fetchCitiesList} addCityLoading={addCityLoading} addCityForm={addCityForm} setAddCityLoading={setAddCityLoading} setAddCityForm={setAddCityForm} success={success} setSuccess={setSuccess} error={error} setError={setError} errorMessage={errorMessage} setErrorMessage={setErrorMessage} successMessage={successMessage} setSuccessMessage={setSuccessMessage} />
+          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} selectedCountry={selectedCountry} addCityForm={addCityForm} setAddCityForm={setAddCityForm} />
         </View>
       )}
 
       {deleteCityForm && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsDeleteForm markerCoordinates={markerCoordinates} currentCity={currentCity} userId={userId} selectedCityId={selectedCityId} selectedCountry={selectedCountry} currentDescription={currentDescription} deleteCityLoading={deleteCityLoading} deleteCityForm={deleteCityForm} setDeleteCityLoading={setDeleteCityLoading} setDeleteCityForm={setDeleteCityForm} fetchCitiesList={fetchCitiesList} success={success} setSuccess={setSuccess} error={error} setError={setError} errorMessage={errorMessage} setErrorMessage={setErrorMessage} successMessage={successMessage} setSuccessMessage={setSuccessMessage} />
+          <DetailsDeleteForm markerCoordinates={markerCoordinates} currentCity={currentCity} selectedCountry={selectedCountry} currentDescription={currentDescription} deleteCityLoading={deleteCityLoading} deleteCityForm={deleteCityForm} setDeleteCityLoading={setDeleteCityLoading} setDeleteCityForm={setDeleteCityForm} selectedCityId={selectedCityId} />
         </View>
       )}
 
-      {success && (
-        <View style={{ position: 'absolute', bottom: 50, left: -5 }} className='rounded-lg bg-green-200 w-[250] h-12 flex justify-center items-center border-2 border-green-600'>
-          <Text className='text-green-600 tracking-widest text-xl '>{successMessage}</Text>
+      <View style={{ position: 'absolute', bottom: 50 }} className='w-[100%] flex items-center '>
+        <TouchableOpacity onPress={() =>
+          getMyCurrentLocation()
+        } className='w-44 h-[40] flex items-center justify-center rounded-lg bg-green-600'>
+          <Text className='text-center text-white tracking-widest'>Current Location</Text>
+        </TouchableOpacity>
+      </View>
+
+      {(cityAddSuccess || cityDeleteSuccess) && (
+        <View style={{ position: 'absolute', bottom: 100, left: -5 }} className='rounded-lg bg-green-200 w-[250] h-12 flex justify-center items-center border-2 border-green-600'>
+          <Text className='text-green-600 tracking-widest text-xl '>{cityAddSuccessMessage ? cityAddSuccessMessage : cityDeleteMessage}</Text>
         </View>
       )}
 
-      {error && (
-        <View style={{ position: 'absolute', bottom: 50, left: -5 }} className='rounded-lg bg-red-200 w-[250] h-12 flex justify-center items-center border-2 border-red-600'>
-          <Text className='text-red-600 tracking-widest text-xl'>{errorMessage}</Text>
+      {(cityAddError || cityDeleteError) && (
+        <View style={{ position: 'absolute', bottom: 100, left: -5 }} className='rounded-lg bg-red-200 w-[250] h-12 flex justify-center items-center border-2 border-red-600'>
+          <Text className='text-red-600 tracking-widest text-xl'>{cityAddErrorMessage ? cityAddErrorMessage : cityDeleteMessage}</Text>
         </View>
       )}
 
       <View style={{ position: 'absolute', bottom: 50, right: 20 }}>
-        <TouchableOpacity onPress={() => handleZoom(true)} style={{ marginBottom: 10 }}>
+        <TouchableOpacity onPress={() =>
+          handleZoom(true)} style={{ marginBottom: 10 }}>
           <FontAwesome name="search-plus" size={40} color="black" />
         </TouchableOpacity>
 
@@ -215,7 +253,6 @@ const HomeScreen = ({ navigation, route }) => {
           <FontAwesome name="search-minus" size={40} color="black" />
         </TouchableOpacity>
       </View>
-
     </View>
   );
 };
