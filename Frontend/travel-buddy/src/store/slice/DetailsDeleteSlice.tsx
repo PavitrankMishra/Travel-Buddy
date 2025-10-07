@@ -3,20 +3,20 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 interface deleteCityState {
     loading: boolean;
     success: boolean;
-    successMessage: string;
     error: boolean;
-    errorMessage: string;
+    message: string;
 }
 
 const initialState: deleteCityState = {
     loading: false,
     success: false,
-    successMessage: "",
     error: false,
-    errorMessage: ""
+    message: "",
 }
 
 export const deleteUserCities = createAsyncThunk("deleteCityForm", async ({ userId, cityId }, { rejectWithValue }) => {
+    console.log("The user id in slice is: ", userId);
+    console.log("The city id in slice is: ", cityId);
     try {
         const res = await fetch(
             `https://travel-buddy-r69f.onrender.com/api/v1/cities/${userId}/${cityId}`,
@@ -47,9 +47,8 @@ const deleteCitySlice = createSlice({
         resetState: (state) => {
             state.error = false;
             state.success = false;
-            state.errorMessage = "";
-            state.successMessage = "";
             state.loading = false;
+            state.message = "";
         }
     },
     extraReducers: (builder) => {
@@ -61,12 +60,12 @@ const deleteCitySlice = createSlice({
             .addCase(deleteUserCities.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
-                state.successMessage = action.payload.message || "Success";
+                state.message = action.payload.message || "Success";
             })
             .addCase(deleteUserCities.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
-                state.errorMessage = action.payload as string;
+                state.message = action.payload as string;
             })
     }
 });
