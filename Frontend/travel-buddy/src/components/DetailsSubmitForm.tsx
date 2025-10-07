@@ -1,25 +1,18 @@
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import Spinner from "./Spinner";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../store/store";
+import { fetchUserCities } from "../store/slice/UserCitySlice";
+import { addUserCities, resetState } from "../store/slice/AddCitySlice";
+
 
 const DetailsSubmitForm = ({
   markerCoordinates,
   selectedCity,
-  userId,
   selectedCountry,
-  fetchCitiesList,
-  addCityLoading,
-  setAddCityLoading,
   addCityForm,
   setAddCityForm,
-  success,
-  setSuccess,
-  error,
-  setError,
-  errorMessage,
-  setErrorMessage,
-  successMessage,
-  setSuccessMessage
 }) => {
   // State that stores the description
   const [description, setDescription] = useState("");
@@ -28,74 +21,49 @@ const DetailsSubmitForm = ({
     setDescription("");
   }, [markerCoordinates]);
 
+  const dispatch = useDispatch<AppDispatch>();
 
-  const submitForm = async (sentData) => {
-    try {
-      setAddCityLoading(true);
-      const res = await fetch(
-        "https://travel-buddy-r69f.onrender.com/api/v1/cities/addCity",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(sentData),
-        }
-      );
+  // Displays success if value is true otherwise false
+  const cityAddSuccess = useSelector((state: any) => state.addCity.success);
 
-      const data = await res.json();
-      if (data.success === false) {
-        throw new Error(data.message);
-      } else {
-        setSuccessMessage(data.message);
-        setTimeout(() => {
-          setAddCityLoading(false);
-          setAddCityForm(false);
-          setSuccess(true);
-        }, 2000);
-        fetchCitiesList();
-        setTimeout(() => {
-          setSuccess(false);
-          setSuccessMessage("");
-        }, 5000);
-      }
-    } catch (err) {
-      setAddCityLoading(false);
-      setAddCityForm(false);
-      setErrorMessage(err.message);
-      setError(true);
-      setTimeout(() => {
-        setError(false);
-        setErrorMessage("");
-      }, 5000);
-      console.log(err);
-    }
-  };
+  // Displays error if value is true otherwise false
+  const cityAddError = useSelector((state: any) => state.addCity.error);
 
+  // Contains the loading state
+  const cityAddLoading = useSelector((state: any) => state.addCity.loading);
+
+  const userData = useSelector((state: any) => state.userLogin.loginUser);
+  console.log("The user id is: ", userData._id);
   const handleCitySubmit = () => {
-    if (selectedCity.length < 0 || description.length < 0) {
-      setError(true);
-      setAddCityForm(false);
-      setTimeout(() => {
-        setError(false);
+    const sentData = {
+      userId: userData._id,
+      visitedCities: [
+        {
+          cityName: selectedCity,
+          country: selectedCountry,
+          notes: description,
+          visitedOn: new Date().toISOString().split("T")[0],
+          lat: markerCoordinates.latitude,
+          lng: markerCoordinates.longitude,
+        },
+      ],
+    };
+    console.log("The sent data is: ", sentData);
+    dispatch(addUserCities(sentData));
+  }
+
+  console.log("The city add error is: ", cityAddError);
+  useEffect(() => {
+    if (cityAddSuccess === true || cityAddError === true) {
+      const timeout = setTimeout(() => {
+        dispatch(resetState());
+        setAddCityForm(false);
+        dispatch(fetchUserCities(userData._id));
       }, 3000);
-    } else {
-      const sentData = {
-        userId: userId,
-        visitedCities: [
-          {
-            cityName: selectedCity,
-            country: selectedCountry,
-            notes: description,
-            visitedOn: new Date().toISOString().split("T")[0],
-            lat: markerCoordinates.latitude,
-            lng: markerCoordinates.longitude,
-          },
-        ],
-      };
-      submitForm(sentData);
+      return () => clearTimeout(timeout);
     }
-  };
+  }, [cityAddSuccess, cityAddError, dispatch]);
+
 
   return (
     <View className="-bg--color-dark--0 rounded-lg w-full items-center gap-y-4 py-4 ">
@@ -123,7 +91,7 @@ const DetailsSubmitForm = ({
           className="bg-green-600 flex items-center justify-center rounded-lg h-12"
           onPress={() => handleCitySubmit()}
         >
-          {!addCityLoading ? (
+          {!cityAddLoading ? (
             <Text className="text-white text-center text-xl tracking-widest py-3">
               Add City
             </Text>
@@ -145,5 +113,4 @@ const DetailsSubmitForm = ({
     </View>
   );
 };
-
 export default DetailsSubmitForm;
