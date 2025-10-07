@@ -62,10 +62,6 @@ const SigninScreen = ({ navigation }) => {
         }
     }, [loginSuccess, loginError]);
 
-    console.log(loginError);
-    console.log(loginSuccess);
-    console.log(loginMessage);
-
     return (
         <View className='bg-white h-full w-full '>
             <View className='h-[100%] w-full -bg--color-dark--1 justify-start items-center pt-20'>

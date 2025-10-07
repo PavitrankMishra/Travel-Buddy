@@ -42,11 +42,6 @@ const HomeScreen = ({ navigation, route }) => {
 
   const loginUserData = useSelector((state: any) => state.userLogin.loginUser);
 
-  useEffect(() => {
-    console.log(loginUserData);
-    console.log(loginUserData._id);
-  }, []);
-
   // Data of the user after successfull login
   // const { userData } = route.params;
 
@@ -92,22 +87,15 @@ const HomeScreen = ({ navigation, route }) => {
   const userCity = useSelector((state: any) => state.userCity.data);
   useEffect(() => {
     dispatch(fetchUserCities(loginUserData._id));
-    console.log("The data od user cties is: ", userCity);
   }, []);
 
   // Function that fires when a marker is pressed
   const handleMarkerPress = (c) => {
-    console.log("The details on marker click is: ", c.country);
-    // Sets the city when the marker is pressed
     setCurrentCity(c.cityName);
     setCurrentDescription(c.notes);
     setSelectedCityId(c._id);
     setDeleteCityForm(true);
   }
-
-  useEffect(() => {
-    console.log(selectedCityId);
-  }, [selectedCityId]);
 
   // State that sets the marker coordinates when map is clicked
   const [markerCoordinates, setMarkerCoordinates] = useState(null);

@@ -50,8 +50,7 @@ export const registerUser = createAsyncThunk(
             if (!data.success) {
                 return rejectWithValue(data.message || "Failed to register user");
             }
-
-            console.log(data);
+            
             return data;
         } catch (err: any) {
             return rejectWithValue(err.message || "Something went wrong");

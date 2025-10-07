@@ -51,8 +51,7 @@ export const loginUser = createAsyncThunk("loginUser", async (loginData: { email
         if (!data.success) {
             return rejectWithValue(data.message || "Failed to register");
         }
-
-        console.log(data);
+        
         return data;
     } catch (err: any) {
         return rejectWithValue(err.message || "Something went wrong");

@@ -15,8 +15,6 @@ const initialState: deleteCityState = {
 }
 
 export const deleteUserCities = createAsyncThunk("deleteCityForm", async ({ userId, cityId }, { rejectWithValue }) => {
-    console.log("The user id in slice is: ", userId);
-    console.log("The city id in slice is: ", cityId);
     try {
         const res = await fetch(
             `https://travel-buddy-r69f.onrender.com/api/v1/cities/${userId}/${cityId}`,
