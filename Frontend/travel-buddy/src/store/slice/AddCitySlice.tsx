@@ -17,9 +17,10 @@ const initialState: AddCityState = {
 }
 
 export const addUserCities = createAsyncThunk("submitCityForm", async (sentData, { rejectWithValue }) => {
+    const addCityApi = process.env.EXPO_PUBLIC_ADDCITY_Api;
     try {
         const res = await fetch(
-            "https://travel-buddy-r69f.onrender.com/api/v1/cities/addCity",
+            addCityApi,
             {
                 method: "POST",
                 headers: {

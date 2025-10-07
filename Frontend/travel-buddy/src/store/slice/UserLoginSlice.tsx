@@ -39,8 +39,10 @@ export const loginUser = createAsyncThunk("loginUser", async (loginData: { email
         return rejectWithValue("All Fields Required");
     }
 
+    const loginApi = process.env.EXPO_PUBLIC_Login_Api;
+
     try {
-        const res = await fetch("https://travel-buddy-r69f.onrender.com/api/v1/auth/login", {
+        const res = await fetch(loginApi, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(loginData),

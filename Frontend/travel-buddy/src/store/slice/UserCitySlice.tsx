@@ -36,8 +36,9 @@ const initialState: UserCityState = {
 }
 
 export const fetchUserCities = createAsyncThunk("fetchCity", async (userId, { rejectWithValue }) => {
+    const userCityApi = process.env.EXPO_PUBLIC_USER_CITY_Api;
     try {
-        const res = await fetch(`https://travel-buddy-r69f.onrender.com/api/v1/cities/${userId}`);
+        const res = await fetch(`${userCityApi}${userId}`);
 
         if (!res.ok) {
             return rejectWithValue("Error");

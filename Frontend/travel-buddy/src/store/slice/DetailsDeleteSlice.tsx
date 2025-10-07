@@ -15,9 +15,10 @@ const initialState: deleteCityState = {
 }
 
 export const deleteUserCities = createAsyncThunk("deleteCityForm", async ({ userId, cityId }, { rejectWithValue }) => {
+    const deleteCityApi = process.env.EXPO_PUBLIC_DELETECITY_Api;
     try {
         const res = await fetch(
-            `https://travel-buddy-r69f.onrender.com/api/v1/cities/${userId}/${cityId}`,
+            `${deleteCityApi}${userId}/${cityId}`,
             {
                 method: "DELETE",
                 headers: {

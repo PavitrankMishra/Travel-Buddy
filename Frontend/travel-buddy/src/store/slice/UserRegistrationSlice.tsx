@@ -31,6 +31,8 @@ const initialState: registrationData = {
         __v: 0,
     }
 }
+
+
 export const registerUser = createAsyncThunk(
     "registerUser",
     async (registrationData: { userName: string; email: string; password: string; phone: string }, { rejectWithValue }) => {
@@ -38,8 +40,10 @@ export const registerUser = createAsyncThunk(
         if (!userName || !email || !password || !phone) {
             return rejectWithValue("All Fields Required");
         }
+
+        const registerApi = process.env.EXPO_PUBLIC_Register_Api;
         try {
-            const res = await fetch("https://travel-buddy-r69f.onrender.com/api/v1/auth/register", {
+            const res = await fetch(registerApi, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(registrationData),
@@ -50,7 +54,7 @@ export const registerUser = createAsyncThunk(
             if (!data.success) {
                 return rejectWithValue(data.message || "Failed to register user");
             }
-            
+
             return data;
         } catch (err: any) {
             return rejectWithValue(err.message || "Something went wrong");
@@ -91,7 +95,7 @@ const userRegistrationSlice = createSlice({
                 state.success = true;
                 state.error = false;
                 state.message = action.payload.message;
-                state.user = action.payload.user; 
+                state.user = action.payload.user;
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.loading = false;
