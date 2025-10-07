@@ -1,61 +1,70 @@
 import { View, Text, Image, TextInput, Button, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Spinner from '../components/Spinner';
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, resetState } from '../store/slice/UserLoginSlice';
 
 const SigninScreen = ({ navigation }) => {
-    const [pressed, setPressed] = useState(false);
-    const [emailValue, setEmailValue] = useState("");
-    const [passwordValue, setPasswordValue] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
-    const [customErrorMessage, setCustomErrorMessage] = useState("");
+
+    const dispatch = useDispatch();
+    // Toggles the value if the button is pressed 
+    const [pressed, setPressed] = useState<boolean>(false);
+
+    // Contains the input email value
+    const [emailValue, setEmailValue] = useState<string>("");
+
+    // Contains the input password value
+    const [passwordValue, setPasswordValue] = useState<string>("");
+
+    // Navigates to Signup screen
     function handleNavigation() {
         navigation.navigate("SignUp");
     };
 
+    // Stores the updated value of email
     function handleEmailInput(text) {
         setEmailValue(text);
     }
 
+    // Stores the updated value of password
     function handlePasswordInput(text) {
         setPasswordValue(text);
     }
 
-    async function handleSignIn() {
-        try {
-            setLoading(true);
-            if (emailValue.length === 0 || passwordValue.length === 0) {
-                throw new Error("Enter some value");
-            }
-            const res = await fetch("https://travel-buddy-r69f.onrender.com/api/v1/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    "email": emailValue,
-                    "password": passwordValue
-                }),
-            });
+    const loginLoading = useSelector((state: any) => state.userLogin.loading);
+    const loginSuccess = useSelector((state: any) => state.userLogin.success);
+    const loginError = useSelector((state: any) => state.userLogin.error);
+    const loginMessage = useSelector((state: any) => state.userLogin.message);
 
-            const data = await res.json();
-            if (data.success === true) {
-                setTimeout(() => {
-                    setLoading(false);
-                    navigation.navigate("Home", { userData: data });
-                }, 1000);
-            } else {
-                throw new Error(data.message);
-            }
-        } catch (e) {
-            setError(true);
-            setCustomErrorMessage(e.message);
-            setTimeout(() => {
-                setError(false);
-            }, 3000);
-            setLoading(false);
+    // Function to handle user sign in process
+    // Throw error if email and password are empty string
+    // Send a POST request using email and password 
+    // Navigates to Home Screen if value of success is true else throws error
+
+    function handleSignIn() {
+        const loginData = {
+            email: emailValue,
+            password: passwordValue,
         }
+        dispatch(loginUser(loginData));
     }
+
+    useEffect(() => {
+        if (loginError === true) {
+            setTimeout(() => {
+                dispatch(resetState());
+            }, 2000);
+        } else if (loginSuccess === true) {
+            setTimeout(() => {
+                navigation.navigate("Home");
+                dispatch(resetState());
+            }, 2000);
+        }
+    }, [loginSuccess, loginError]);
+
+    console.log(loginError);
+    console.log(loginSuccess);
+    console.log(loginMessage);
 
     return (
         <View className='bg-white h-full w-full '>
@@ -73,7 +82,7 @@ const SigninScreen = ({ navigation }) => {
                             setPressed(true)
                         }
                         } onPressOut={() => setPressed(false)} activeOpacity={0.8} onPress={() => handleSignIn()}>
-                            {!loading ? (
+                            {!loginLoading ? (
                                 <Text className='text-white text-2xl font-medium tracking-wider' >Submit</Text>
                             ) : (<Spinner />)
                             }
@@ -81,7 +90,8 @@ const SigninScreen = ({ navigation }) => {
                         <View>
                             <Text className='text-white tracking-wider text-xl'>New User ? <Text className='text-green-600 tracking-widest' onPress={() => handleNavigation()}>Register</Text></Text>
                         </View>
-                        {error ? (<View><Text className='text-white tracking-wider text-xl text-center'>{customErrorMessage}</Text></View>) : (<Text></Text>)}
+                        {loginError && (<View><Text className='text-white tracking-wider text-xl text-center'>{loginMessage}</Text></View>)}
+                        {loginSuccess && (<View><Text className='text-white tracking-wider text-xl text-center'>{loginMessage}</Text></View>)}
                     </View>
                 </View>
             </View>
