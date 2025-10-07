@@ -1,77 +1,48 @@
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 import Spinner from "./Spinner";
+import { useDispatch, UseDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../store/store";
+import { deleteUserCities, resetState } from "../store/slice/DetailsDeleteSlice";
+import { fetchUserCities } from "../store/slice/UserCitySlice";
 
 const DetailsDeleteForm = ({
   markerCoordinates,
   currentCity,
-  userId,
-  selectedCityId,
   selectedCountry,
   currentDescription,
   deleteCityLoading,
   deleteCityForm,
   setDeleteCityLoading,
   setDeleteCityForm,
-  fetchCitiesList,
-  success,
-  setSuccess,
-  error,
-  setError,
-  errorMessage,
-  setErrorMessage,
-  successMessage,
-  setSuccessMessage
+  selectedCityId
 }) => {
-  const handleCityDelete = async (userId: string, cityId: string) => {
-    try {
-      setDeleteCityLoading(true);
-      const res = await fetch(
-        `https://travel-buddy-r69f.onrender.com/api/v1/cities/${userId}/${cityId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
 
-      const data = await res.json();
+  const dispatch = useDispatch();
 
-      if (data.success === false) {
-        throw new Error(data.message);
-      } else {
-        setTimeout(() => {
-          setDeleteCityLoading(false);
-          setDeleteCityForm(false);
-          setSuccess(true);
-          setSuccessMessage(data.message);
-        }, 2000);
-
-        fetchCitiesList();
-        setTimeout(() => {
-          setSuccess(false);
-          setSuccessMessage("");
-        }, 5000);
-      }
-
-    } catch (err) {
-      setDeleteCityLoading(false);
-      setErrorMessage(err.message);
-      setDeleteCityForm(false);
-      setError(false);
-      setTimeout(() => {
-        setError(false);
-        setErrorMessage("");
-      }, 5000);
-    }
-  };
+  const loginUserData = useSelector((state: any) => state.userLogin.loginUser);
 
   function handleDelete() {
-    if (selectedCityId) {
-      handleCityDelete(userId, selectedCityId);
-    }
+    console.log("This is called");
+    console.log("The value is: ", loginUserData._id);
+    console.log("The value is: ", selectedCityId);
+    dispatch(deleteUserCities({ userId: loginUserData._id, cityId: selectedCityId }));
   };
+
+  const cityDeleteError = useSelector((state: any) => state.deleteCity.error);
+  const cityDeleteSuccess = useSelector((state: any) => state.deleteCity.success);
+  const cityDeleteLoading = useSelector((state: any) => state.deleteCity.loading);
+  const cityDeleteMessage = useSelector((state: any) => state.deleteCity.message);
+
+  useEffect(() => {
+    if (cityDeleteSuccess === true || cityDeleteError === true) {
+      setTimeout(() => {
+        dispatch(resetState());
+        dispatch(fetchUserCities(loginUserData._id));
+        setDeleteCityForm(false);
+      }, 2000);
+    }
+  }, [cityDeleteError, cityDeleteSuccess, cityDeleteLoading, cityDeleteMessage]);
 
   return (
     <View className="-bg--color-dark--0 rounded-lg w-full items-center gap-y-4 py-4 ">
@@ -98,7 +69,7 @@ const DetailsDeleteForm = ({
           className="bg-green-600 h-10 flex items-center justify-center rounded-lg"
           onPress={() => handleDelete()}
         >
-          {!deleteCityLoading ? (
+          {!cityDeleteLoading ? (
             <Text className="text-white text-center text-xl tracking-widest">
               Delete City
             </Text>
