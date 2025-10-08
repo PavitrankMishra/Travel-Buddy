@@ -25,7 +25,6 @@
     "plugins": [
       "expo-router",
       ["expo-splash-screen"],
-      ["expo-env", { "envFile": ".env" }],
       "expo-web-browser"
     ],
     "experiments": {
