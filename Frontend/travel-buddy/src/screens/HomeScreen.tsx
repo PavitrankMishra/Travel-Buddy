@@ -174,12 +174,6 @@ const HomeScreen = ({ navigation, route }) => {
   const cityDeleteSuccess = useSelector((state: any) => state.deleteCity.success);
   const cityDeleteLoading = useSelector((state: any) => state.deleteCity.loading);
   const cityDeleteMessage = useSelector((state: any) => state.deleteCity.message);
-
-
-  useEffect(() => {
-    console.log("The value of current coords: ", currentCoords);
-  }, [currentCoords]);
-
   
   return (
     <View style={{ flex: 1 }} >
