@@ -7,6 +7,7 @@ import { fetchUserCities } from "../store/slice/UserCitySlice";
 import { addUserCities, resetState } from "../store/slice/AddCitySlice";
 
 
+// Type Declaration for DetailsSubmitForm component props
 type DetailsSubmitFormProps = {
   markerCoordinates: { latitude: number, longitude: number };
   selectedCity: string;
@@ -18,6 +19,7 @@ const DetailsSubmitForm = ({ markerCoordinates, selectedCity, selectedCountry, s
   // State that stores the description
   const [description, setDescription] = useState("");
 
+  // Resets the value of description if coordinates of the marker are changed
   useEffect(() => {
     setDescription("");
   }, [markerCoordinates]);
@@ -33,8 +35,10 @@ const DetailsSubmitForm = ({ markerCoordinates, selectedCity, selectedCountry, s
   // Contains the loading state
   const cityAddLoading = useSelector((state: any) => state.addCity.loading);
 
+  // Contains the data of the logged in user
   const userData = useSelector((state: any) => state.userLogin.loginUser);
-  console.log("The user id is: ", userData._id);
+
+  // Runs when we click on addCity button
   const handleCitySubmit = () => {
     const sentData = {
       userId: userData._id,
@@ -49,11 +53,11 @@ const DetailsSubmitForm = ({ markerCoordinates, selectedCity, selectedCountry, s
         },
       ],
     };
+
     console.log("The sent data is: ", sentData);
     dispatch(addUserCities(sentData));
   }
 
-  console.log("The city add error is: ", cityAddError);
   useEffect(() => {
     if (cityAddSuccess === true || cityAddError === true) {
       const timeout = setTimeout(() => {
@@ -63,7 +67,7 @@ const DetailsSubmitForm = ({ markerCoordinates, selectedCity, selectedCountry, s
       }, 3000);
       return () => clearTimeout(timeout);
     }
-  }, [cityAddSuccess, cityAddError, dispatch]);
+  }, [cityAddSuccess, cityAddError]);
 
 
   return (

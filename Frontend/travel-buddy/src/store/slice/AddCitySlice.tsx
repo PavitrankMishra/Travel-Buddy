@@ -16,11 +16,10 @@ const initialState: AddCityState = {
     errorMessage: ""
 }
 
-export const addUserCities = createAsyncThunk("submitCityForm", async (sentData, { rejectWithValue }) => {
+export const addUserCities = createAsyncThunk<any>("submitCityForm", async (sentData, { rejectWithValue }) => {
     const addCityApi = process.env.EXPO_PUBLIC_ADDCITY_Api;
     try {
-        const res = await fetch(
-            addCityApi,
+        const res = await fetch(addCityApi,
             {
                 method: "POST",
                 headers: {

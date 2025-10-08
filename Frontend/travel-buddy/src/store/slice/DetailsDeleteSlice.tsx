@@ -14,7 +14,7 @@ const initialState: deleteCityState = {
     message: "",
 }
 
-export const deleteUserCities = createAsyncThunk("deleteCityForm", async ({ userId, cityId }, { rejectWithValue }) => {
+export const deleteUserCities = createAsyncThunk<any, { userId: string, cityId: string }>("deleteCityForm", async ({ userId, cityId }, { rejectWithValue }) => {
     const deleteCityApi = process.env.EXPO_PUBLIC_DELETECITY_Api;
     try {
         const res = await fetch(
