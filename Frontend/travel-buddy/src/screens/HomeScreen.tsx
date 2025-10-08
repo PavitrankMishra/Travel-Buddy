@@ -79,10 +79,7 @@ const HomeScreen = ({ navigation, route }) => {
 
   const [selectedCity, setSelectedCity] = useState("");
   // State that contains the coordinates of live location
-  const [currentCoords, setCurrentCoords] = useState<{ latitude: number | null, longitude: number | null }>({
-    latitude: null,
-    longitude: null,
-  });
+  const [currentCoords, setCurrentCoords] = useState<{ latitude?: number, longitude?: number }>({});
 
   const userCity = useSelector((state: any) => state.userCity.data);
   useEffect(() => {
@@ -178,6 +175,12 @@ const HomeScreen = ({ navigation, route }) => {
   const cityDeleteLoading = useSelector((state: any) => state.deleteCity.loading);
   const cityDeleteMessage = useSelector((state: any) => state.deleteCity.message);
 
+
+  useEffect(() => {
+    console.log("The value of current coords: ", currentCoords);
+  }, [currentCoords]);
+
+  
   return (
     <View style={{ flex: 1 }} >
       <MapView
@@ -198,6 +201,7 @@ const HomeScreen = ({ navigation, route }) => {
           )
         })}
         {addCityForm && markerCoordinates && <Marker coordinate={markerCoordinates} />}
+        {(currentCoords.latitude != null && currentCoords.longitude != null) && <Marker coordinate={currentCoords} onPress={handleMapPress}/>}
       </MapView>
       {addCityForm && (
         <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
@@ -211,25 +215,29 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
       )}
 
+
       <View style={{ position: 'absolute', bottom: 50 }} className='w-[100%] flex items-center '>
-        <TouchableOpacity onPress={() =>
-          getMyCurrentLocation()
-        } className='w-44 h-[40] flex items-center justify-center rounded-lg bg-green-600'>
+        <TouchableOpacity className='w-44 h-[40] flex items-center justify-center rounded-lg bg-green-600' onPress={() =>
+          getMyCurrentLocation()}>
           <Text className='text-center text-white tracking-widest'>Current Location</Text>
         </TouchableOpacity>
       </View>
 
-      {(cityAddSuccess || cityDeleteSuccess) && (
-        <View style={{ position: 'absolute', bottom: 100, left: -5 }} className='rounded-lg bg-green-200 w-[250] h-12 flex justify-center items-center border-2 border-green-600'>
-          <Text className='text-green-600 tracking-widest text-xl '>{cityAddSuccessMessage ? cityAddSuccessMessage : cityDeleteMessage}</Text>
-        </View>
-      )}
+      {
+        (cityAddSuccess || cityDeleteSuccess) && (
+          <View style={{ position: 'absolute', bottom: 100, left: -5 }} className='rounded-lg bg-green-200 w-[250] h-12 flex justify-center items-center border-2 border-green-600'>
+            <Text className='text-green-600 tracking-widest text-xl '>{cityAddSuccessMessage ? cityAddSuccessMessage : cityDeleteMessage}</Text>
+          </View>
+        )
+      }
 
-      {(cityAddError || cityDeleteError) && (
-        <View style={{ position: 'absolute', bottom: 100, left: -5 }} className='rounded-lg bg-red-200 w-[250] h-12 flex justify-center items-center border-2 border-red-600'>
-          <Text className='text-red-600 tracking-widest text-xl'>{cityAddErrorMessage ? cityAddErrorMessage : cityDeleteMessage}</Text>
-        </View>
-      )}
+      {
+        (cityAddError || cityDeleteError) && (
+          <View style={{ position: 'absolute', bottom: 100, left: -5 }} className='rounded-lg bg-red-200 w-[250] h-12 flex justify-center items-center border-2 border-red-600'>
+            <Text className='text-red-600 tracking-widest text-xl'>{cityAddErrorMessage ? cityAddErrorMessage : cityDeleteMessage}</Text>
+          </View>
+        )
+      }
 
       <View style={{ position: 'absolute', bottom: 50, right: 20 }}>
         <TouchableOpacity onPress={() =>
@@ -241,7 +249,7 @@ const HomeScreen = ({ navigation, route }) => {
           <FontAwesome name="search-minus" size={40} color="black" />
         </TouchableOpacity>
       </View>
-    </View>
+    </View >
   );
 };
 
