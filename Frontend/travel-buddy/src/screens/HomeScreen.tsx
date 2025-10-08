@@ -10,16 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from '../store/store';
 import { fetchUserCities } from '../store/slice/UserCitySlice';
 
-type City = {
-  _id: string;
-  cityName: string;
-  country: string;
-  lat: number;
-  lng: number;
-  notes: string;
-  visitedOn: string;
-};
-
 const HomeScreen = ({ navigation, route }) => {
 
   // Gets the redux dispatch function
@@ -37,13 +27,7 @@ const HomeScreen = ({ navigation, route }) => {
   // Contains the error message
   const cityAddErrorMessage = useSelector((state: any) => state.addCity.errorMessage);
 
-  // Displays spinner if loading is true 
-  const cityAddLoading = useSelector((state: any) => state.addCity.loading);
-
   const loginUserData = useSelector((state: any) => state.userLogin.loginUser);
-
-  // Data of the user after successfull login
-  // const { userData } = route.params;
 
   // State that defines the initial region of the map
   const [region, setRegion] = useState({
@@ -170,6 +154,7 @@ const HomeScreen = ({ navigation, route }) => {
     }));
   };
 
+  
   const cityDeleteError = useSelector((state: any) => state.deleteCity.error);
   const cityDeleteSuccess = useSelector((state: any) => state.deleteCity.success);
   const cityDeleteLoading = useSelector((state: any) => state.deleteCity.loading);

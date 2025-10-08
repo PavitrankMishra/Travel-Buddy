@@ -45,11 +45,19 @@ const SignupScreen = ({ navigation }) => {
     setPhone(text);
   }
 
+  // Add Redux dispatch hook
   const dispatch = useDispatch();
 
+  // Displays message if the value is true
   const registerSuccess = useSelector((state: any) => state.userRegistration.success);
+
+  // Displays spinner if the value is true
   const registerLoading = useSelector((state: any) => state.userRegistration.loading);
+
+  // Displays error if the valu is true
   const registerError = useSelector((state: any) => state.userRegistration.error);
+
+  // Contains the message as a response from the api
   const registerMessage = useSelector((state: any) => state.userRegistration.message);
 
   // Function that handles user registration process
@@ -62,15 +70,20 @@ const SignupScreen = ({ navigation }) => {
       password: password,
       phone: phone,
     }
+
+    // Dispatch action to register user
     dispatch(registerUser(registerData));
   }
 
+  // Runs if the registerSuccess and registerError changes
+  // If registererror is true than disptach resetState action after 2 seconds
+  // If registerSuccess is true than after 2 seconds dispatch resetState and navigate to HomeScreen 
   useEffect(() => {
     if (registerError === true) {
       setTimeout(() => {
         dispatch(resetState());
       }, 2000);
-    } else if(registerSuccess === true) {
+    } else if (registerSuccess === true) {
       setTimeout(() => {
         navigation.navigate("SignIn");
         dispatch(resetState());

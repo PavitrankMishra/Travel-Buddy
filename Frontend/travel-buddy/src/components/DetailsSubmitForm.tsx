@@ -1,5 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import Spinner from "./Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store/store";
@@ -7,13 +7,14 @@ import { fetchUserCities } from "../store/slice/UserCitySlice";
 import { addUserCities, resetState } from "../store/slice/AddCitySlice";
 
 
-const DetailsSubmitForm = ({
-  markerCoordinates,
-  selectedCity,
-  selectedCountry,
-  addCityForm,
-  setAddCityForm,
-}) => {
+type DetailsSubmitFormProps = {
+  markerCoordinates: { latitude: number, longitude: number };
+  selectedCity: string;
+  selectedCountry: string;
+  setAddCityForm: React.Dispatch<SetStateAction<boolean>>;
+}
+
+const DetailsSubmitForm = ({ markerCoordinates, selectedCity, selectedCountry, setAddCityForm }: DetailsSubmitFormProps) => {
   // State that stores the description
   const [description, setDescription] = useState("");
 

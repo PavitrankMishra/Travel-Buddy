@@ -31,24 +31,33 @@ const SigninScreen = ({ navigation }) => {
         setPasswordValue(text);
     }
 
+    // Stores the loading state to display spinner if value is true
     const loginLoading = useSelector((state: any) => state.userLogin.loading);
+
+    // Display success message if value is true
     const loginSuccess = useSelector((state: any) => state.userLogin.success);
+
+    // Display error message if value is true
     const loginError = useSelector((state: any) => state.userLogin.error);
+
+    // Display message if login is successfull or failed
     const loginMessage = useSelector((state: any) => state.userLogin.message);
 
     // Function to handle user sign in process
-    // Throw error if email and password are empty string
-    // Send a POST request using email and password 
-    // Navigates to Home Screen if value of success is true else throws error
-
     function handleSignIn() {
+        // Data to be sent as argument
         const loginData = {
             email: emailValue,
             password: passwordValue,
         }
+
+        // Dispatches action to make a login request
         dispatch(loginUser(loginData));
     }
 
+    // Runs if the value of loginSuccess or loginError changes
+    // If error in login than reset state 
+    // If login is successfull than navigate to homepage and reset state
     useEffect(() => {
         if (loginError === true) {
             setTimeout(() => {
@@ -72,7 +81,7 @@ const SigninScreen = ({ navigation }) => {
                 <View className='w-[80%] flex items-center justify-center gap-y-8 pt-8 '>
                     <Text className='text-white text-2xl border-b-4 border-green-600 w-full  rounded-2xl text-center pb-2'>LOGIN</Text>
                     <TextInput placeholder="Enter your email" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={emailValue} onChangeText={(text) => handleEmailInput(text)}></TextInput>
-                    <TextInput placeholder="Enter your Password" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={passwordValue} onChangeText={(text) => handlePasswordInput(text)}></TextInput>
+                    <TextInput secureTextEntry={true} placeholder="Enter your Password" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={passwordValue} onChangeText={(text) => handlePasswordInput(text)}></TextInput>
                     <View className='w-full flex items-center gap-y-6'>
                         <TouchableOpacity className={`w-full py-3 rounded-xl items-center ${pressed ? "bg-green-500" : "bg-green-600"}`} onPressIn={() => {
                             setPressed(true)
@@ -86,6 +95,7 @@ const SigninScreen = ({ navigation }) => {
                         <View>
                             <Text className='text-white tracking-wider text-xl'>New User ? <Text className='text-green-600 tracking-widest' onPress={() => handleNavigation()}>Register</Text></Text>
                         </View>
+
                         {loginError && (<View><Text className='text-white tracking-wider text-xl text-center'>{loginMessage}</Text></View>)}
                         {loginSuccess && (<View><Text className='text-white tracking-wider text-xl text-center'>{loginMessage}</Text></View>)}
                     </View>
