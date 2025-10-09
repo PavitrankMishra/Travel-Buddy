@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+// Interface for the structure of visitedcity
+// Contains keys that represents information such as cityName, country, notes
 interface VisitedCity {
     _id: string;
     cityName: string;
@@ -10,15 +12,8 @@ interface VisitedCity {
     lng: number;
 }
 
-interface UserData {
-    _id: string;
-    userId: string;
-    visitedCities: VisitedCity[];
-    createdAt: string;
-    updatedAt: string;
-    _v: number;
-}
-
+// Interface for the structure of of user city
+// Contains the keys that represents success, error, loading, errorMessage and data
 interface UserCityState {
     loading: boolean;
     success: boolean;
@@ -27,6 +22,7 @@ interface UserCityState {
     data: VisitedCity[];
 }
 
+// Define the initial state for user city
 const initialState: UserCityState = {
     loading: false,
     success: false,
@@ -35,6 +31,8 @@ const initialState: UserCityState = {
     data: [],
 }
 
+// Async thunk for fetching user cities
+// Fetch user cities using userId and returns list of visited cities
 export const fetchUserCities = createAsyncThunk("fetchCity", async (userId, { rejectWithValue }) => {
     const userCityApi = process.env.EXPO_PUBLIC_USER_CITY_Api;
     try {
@@ -51,6 +49,8 @@ export const fetchUserCities = createAsyncThunk("fetchCity", async (userId, { re
     }
 })
 
+// Redux slice for handling user city state
+// Manages loading, success, error, errorMessage, data 
 const userCitySlice = createSlice({
     name: 'userCities',
     initialState,

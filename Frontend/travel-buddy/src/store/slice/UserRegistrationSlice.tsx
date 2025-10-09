@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+// Interface for the structure of user data
+// Contains keys that represents user information such as userName, email, password, phone and database identifiers
 interface userData {
     userName: string,
     email: string,
@@ -9,6 +11,8 @@ interface userData {
     __v: number,
 }
 
+// Interface for the structure of registeration data 
+// Contains the keys that represents success, error, message, loading and user object
 interface registrationData {
     success: boolean,
     error: boolean,
@@ -17,6 +21,7 @@ interface registrationData {
     user: userData,
 }
 
+// Define the initial state for user registration
 const initialState: registrationData = {
     success: false,
     error: false,
@@ -32,7 +37,8 @@ const initialState: registrationData = {
     }
 }
 
-
+// Async thunk for registering a new user
+// Sends registration data to the API, handles validation, error and success response
 export const registerUser = createAsyncThunk(
     "registerUser",
     async (registrationData: { userName: string; email: string; password: string; phone: string }, { rejectWithValue }) => {
@@ -63,6 +69,8 @@ export const registerUser = createAsyncThunk(
 );
 
 
+// Redux slice for handling userRegistration state
+// Manages loading, success, error, message and user object
 const userRegistrationSlice = createSlice({
     name: 'registerUser',
     initialState,

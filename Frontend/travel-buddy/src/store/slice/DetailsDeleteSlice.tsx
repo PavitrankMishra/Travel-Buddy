@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+// Interface for the structure of deleteCity
+// Contains keys that represents information such as loading, success, error and message
 interface deleteCityState {
     loading: boolean;
     success: boolean;
@@ -7,6 +9,7 @@ interface deleteCityState {
     message: string;
 }
 
+// Defines the initial state of delete city
 const initialState: deleteCityState = {
     loading: false,
     success: false,
@@ -14,6 +17,8 @@ const initialState: deleteCityState = {
     message: "",
 }
 
+// Async thunk for deleting user city
+// Delete usercity using userId and cityId 
 export const deleteUserCities = createAsyncThunk<any, { userId: string, cityId: string }>("deleteCityForm", async ({ userId, cityId }, { rejectWithValue }) => {
     const deleteCityApi = process.env.EXPO_PUBLIC_DELETECITY_Api;
     try {
@@ -39,6 +44,8 @@ export const deleteUserCities = createAsyncThunk<any, { userId: string, cityId: 
     }
 });
 
+// Redux slice for handling user city delete
+// Manages loading, success, error and message
 const deleteCitySlice = createSlice({
     name: 'deleteCity',
     initialState,

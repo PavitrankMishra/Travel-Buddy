@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+// Interface for the structure of add city
+// Contains keys that represents information such as loading, success, successMessage, error and errorMessage
 interface AddCityState {
     loading: boolean;
     success: boolean;
@@ -8,6 +10,7 @@ interface AddCityState {
     errorMessage: string;
 }
 
+// Define the initial state for add city
 const initialState: AddCityState = {
     loading: false,
     success: false,
@@ -16,6 +19,8 @@ const initialState: AddCityState = {
     errorMessage: ""
 }
 
+// Async thunk for adding a new city
+// Adds a new city using the sent data
 export const addUserCities = createAsyncThunk<any>("submitCityForm", async (sentData, { rejectWithValue }) => {
     const addCityApi = process.env.EXPO_PUBLIC_ADDCITY_Api;
     try {
@@ -43,6 +48,8 @@ export const addUserCities = createAsyncThunk<any>("submitCityForm", async (sent
     }
 });
 
+// Redux slice for handling add city slice
+// Manages error, success, errorMessage, successMessage, loading
 const addCitySlice = createSlice({
     name: 'addCity',
     initialState,
