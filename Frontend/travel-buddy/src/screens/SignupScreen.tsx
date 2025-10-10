@@ -32,17 +32,31 @@ const SignupScreen = ({ navigation }) => {
 
   // Function that updates the email state
   function handleEmailInput(text) {
-    setEmail(text)
+    const emailPattern = /^[a-zA-Z0-9.]*@?[a-zA-Z0-9.]*$/;
+    if (emailPattern.test(text)) {
+      setEmail(text)
+    } else {
+      return;
+    }
   }
 
   // Function that updates the password state
   function handlePasswordInput(text) {
-    setPassword(text);
+    if (text.length <= 8) {
+      setPassword(text);
+    }
   }
 
   // Function that updates the phone state
   function handlePhoneInput(text) {
-    setPhone(text);
+    if (text.length <= 10) {
+      const phonePattern = /^[0-9]*$/;
+      if (phonePattern.test(text)) {
+        setPhone(text);
+      }
+    } else {
+      return;
+    }
   }
 
   // Add Redux dispatch hook
@@ -102,7 +116,7 @@ const SignupScreen = ({ navigation }) => {
         <TextInput placeholder="Username" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={userName} onChangeText={(text) => handleUserNameInput(text)}></TextInput>
         <TextInput placeholder="Email" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={email} onChangeText={(text) => handleEmailInput(text)}></TextInput>
         <TextInput placeholder="Password" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={password} onChangeText={(text) => handlePasswordInput(text)}></TextInput>
-        <TextInput placeholder="Phone " className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={phone} onChangeText={(text) => setPhone(text)}></TextInput>
+        <TextInput placeholder="Phone " className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={phone} onChangeText={(text) => handlePhoneInput(text)}></TextInput>
         <View className='w-full flex items-center gap-y-6'>
           <TouchableOpacity className={`w-full py-3 rounded-xl items-center ${pressed ? "bg-green-500" : "bg-green-600"}`} onPressIn={() => setPressed(true)} onPressOut={() => setPressed(false)} activeOpacity={0.8} onPress={() => handleSubmit()}>
             {registerLoading ? (<Text><Spinner /></Text>) : (<Text className='text-white text-2xl font-medium tracking-wider'>Submit</Text>)}

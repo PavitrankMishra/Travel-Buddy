@@ -23,12 +23,20 @@ const SigninScreen = ({ navigation }) => {
 
     // Stores the updated value of email
     function handleEmailInput(text) {
-        setEmailValue(text);
+        const emailPattern = /^[a-zA-Z0-9.]*@?[a-zA-Z0-9.]*$/;
+        if (emailPattern.test(text)) {
+            setEmailValue(text);
+            console.log(text + "is valid");
+        } else {
+            return;
+        }
     }
 
     // Stores the updated value of password
     function handlePasswordInput(text) {
-        setPasswordValue(text);
+        if (text.length <= 8) {
+            setPasswordValue(text);
+        }
     }
 
     // Stores the loading state to display spinner if value is true
