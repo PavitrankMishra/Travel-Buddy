@@ -1,7 +1,7 @@
 import mongoose, { Schema, Types } from "mongoose";
 
-// Interface for a single visited city
-
+// Interface for details of single visited city
+// Contains keys like cityName, country, notes and visitedOn for details of city
 export interface IVisitedCity {
     cityName: string,
     country: string,
@@ -9,12 +9,15 @@ export interface IVisitedCity {
     visitedOn: Date
 }
 
+// Interface representing data of cities of a particular user
 export interface ICities extends Document {
     userId: Types.ObjectId,
     visitedCities: IVisitedCity[],
     createdAt: Date,
     updatedAt: Date,
 }
+
+// Mongoose schema for structure of a cities location
 const citySchema = new mongoose.Schema<ICities>({
     userId: {
         type: Schema.Types.ObjectId,
@@ -33,6 +36,7 @@ const citySchema = new mongoose.Schema<ICities>({
     ]
 }, { timestamps: true });
 
+// Model for interacting with cities collection in mongodb
 const Cities = mongoose.model<ICities>("cities", citySchema);
 
 export default Cities;
