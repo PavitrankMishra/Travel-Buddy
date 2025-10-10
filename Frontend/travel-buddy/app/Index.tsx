@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import "../../global.css";
-import SigninScreen from '../screens/SigninScreen';
-import SignupScreen from '../screens/SignupScreen';
+import "../global.css"
+import SigninScreen from '@/src/screens/SigninScreen';
+import SignupScreen from '@/src/screens/SignupScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '@/src/screens/HomeScreen';
 import { Provider } from 'react-redux';
-import store from '../store/store';
+import store from '../src/store/store';
 
 const Stack = createNativeStackNavigator();
 const Index = () => {
