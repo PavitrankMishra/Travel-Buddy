@@ -23,6 +23,11 @@ const initialState: AddCityState = {
 // Adds a new city using the sent data
 export const addUserCities = createAsyncThunk<any>("submitCityForm", async (sentData, { rejectWithValue }) => {
     const addCityApi = process.env.EXPO_PUBLIC_ADDCITY_Api;
+
+    if (!addCityApi) {
+        throw new Error("Add city Api endpoint is not defined");
+    }
+
     try {
         const res = await fetch(addCityApi,
             {

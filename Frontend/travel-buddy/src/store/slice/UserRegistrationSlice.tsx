@@ -48,6 +48,11 @@ export const registerUser = createAsyncThunk(
         }
 
         const registerApi = process.env.EXPO_PUBLIC_Register_Api;
+
+        if(!registerApi) {
+            throw new Error ("Register Api endpoint is not defined in environment variables.");
+        }
+        
         try {
             const res = await fetch(registerApi, {
                 method: "POST",

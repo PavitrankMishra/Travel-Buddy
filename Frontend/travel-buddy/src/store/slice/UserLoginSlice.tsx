@@ -45,7 +45,11 @@ export const loginUser = createAsyncThunk("loginUser", async (loginData: { email
         return rejectWithValue("All Fields Required");
     }
 
+  
     const loginApi = process.env.EXPO_PUBLIC_Login_Api;
+      if(!loginApi) {
+        throw new Error("Login API endpoint is not defined in environment variables");
+    }
 
     try {
         const res = await fetch(loginApi, {
