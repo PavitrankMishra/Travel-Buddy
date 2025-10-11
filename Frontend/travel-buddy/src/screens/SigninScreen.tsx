@@ -26,7 +26,6 @@ const SigninScreen = ({ navigation }) => {
         const emailPattern = /^[a-zA-Z0-9.]*@?[a-zA-Z0-9.]*$/;
         if (emailPattern.test(text)) {
             setEmailValue(text);
-            console.log(text + "is valid");
         } else {
             return;
         }

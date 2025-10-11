@@ -54,7 +54,6 @@ const DetailsSubmitForm = ({ markerCoordinates, selectedCity, selectedCountry, s
       ],
     };
 
-    console.log("The sent data is: ", sentData);
     dispatch(addUserCities(sentData));
   }
 
