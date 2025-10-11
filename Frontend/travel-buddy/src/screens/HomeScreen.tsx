@@ -9,6 +9,7 @@ import Spinner from '../components/Spinner';
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from '../store/store';
 import { fetchUserCities } from '../store/slice/UserCitySlice';
+import Animated, { FadeInLeft, FadeInRight, FadeOutLeft, FadeOutRight } from 'react-native-reanimated';
 
 const HomeScreen = ({ navigation, route }) => {
 
@@ -214,16 +215,34 @@ const HomeScreen = ({ navigation, route }) => {
         {addCityForm && markerCoordinates && <Marker coordinate={markerCoordinates} />}
         {(currentCoords.latitude != null && currentCoords.longitude != null) && <Marker coordinate={currentCoords} onPress={handleMapPress} />}
       </MapView>
+
       {addCityForm && (
-        <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
-          <DetailsSubmitForm markerCoordinates={markerCoordinates} selectedCity={selectedCity} selectedCountry={selectedCountry} setAddCityForm={setAddCityForm} />
-        </View>
+        <Animated.View
+          entering={FadeInLeft.duration(500)}
+          exiting={FadeOutLeft.duration(500)}
+          style={{
+            position: 'absolute',
+            top: 75,
+            left: 0,
+            right: 10,
+            alignItems: 'center',
+          }}
+          className="w-[80%] flex items-center justify-center"
+        >
+          <DetailsSubmitForm
+            markerCoordinates={markerCoordinates}
+            selectedCity={selectedCity}
+            selectedCountry={selectedCountry}
+            setAddCityForm={setAddCityForm}
+          />
+        </Animated.View>
       )}
 
       {deleteCityForm && (
-        <View style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
+        <Animated.View entering={FadeInLeft.duration(500)}
+          exiting={FadeOutLeft.duration(500)} style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
           <DetailsDeleteForm setDeleteCityForm={setDeleteCityForm} currentCity={currentCity} currentDescription={currentDescription} selectedCityId={selectedCityId} />
-        </View>
+        </Animated.View>
       )}
 
       <View style={{ position: 'absolute', bottom: 50 }} className='w-[100%] flex items-center '>
@@ -235,19 +254,25 @@ const HomeScreen = ({ navigation, route }) => {
 
       {
         (cityAddSuccess || cityDeleteSuccess) && (
-          <View style={{ position: 'absolute', bottom: 100, left: -5 }} className='rounded-lg bg-green-200 w-[250] h-12 flex justify-center items-center border-2 border-green-600'>
+          <Animated.View entering={FadeInLeft.duration(500)}
+            exiting={FadeOutLeft.duration(500)} style={{ position: 'absolute', bottom: 100, left: -5 }} className='rounded-lg bg-green-200 w-[250] h-12 flex justify-center items-center border-2 border-green-600'>
             <Text className='text-green-600 tracking-widest text-xl '>{cityAddSuccessMessage ? cityAddSuccessMessage : cityDeleteMessage}</Text>
-          </View>
+          </Animated.View>
         )
       }
 
-      {
-        (cityAddError || cityDeleteError) && (
-          <View style={{ position: 'absolute', bottom: 100, left: -5 }} className='rounded-lg bg-red-200 w-[250] h-12 flex justify-center items-center border-2 border-red-600'>
-            <Text className='text-red-600 tracking-widest text-xl'>{cityAddErrorMessage ? cityAddErrorMessage : cityDeleteMessage}</Text>
-          </View>
-        )
-      }
+      {(cityAddError || cityDeleteError) && (
+        <Animated.View
+          entering={FadeInLeft.duration(500)}
+          exiting={FadeOutLeft.duration(500)}
+          style={{ position: 'absolute', bottom: 100, left: -5 }}
+          className='rounded-lg bg-red-200 w-[250] h-12 flex justify-center items-center border-2 border-red-600'
+        >
+          <Text className='text-red-600 tracking-widest text-xl'>
+            {cityAddErrorMessage ? cityAddErrorMessage : cityDeleteMessage}
+          </Text>
+        </Animated.View>
+      )}
 
       <View style={{ position: 'absolute', bottom: 50, right: 20 }}>
         <TouchableOpacity onPress={() =>
