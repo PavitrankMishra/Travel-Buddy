@@ -10,8 +10,7 @@ import { AppDispatch } from '../src/store/store';
 import { fetchUserCities } from '../src/store/slice/UserCitySlice';
 import Animated, { FadeInLeft, FadeOutLeft } from 'react-native-reanimated';
 
-export default function HomeScreen ({ navigation, route }) {
-
+export default function HomeScreen() {
   // Gets the redux dispatch function
   const dispatch = useDispatch<AppDispatch>();
 
@@ -194,7 +193,7 @@ export default function HomeScreen ({ navigation, route }) {
   return (
     <View style={{ flex: 1 }} >
       <MapView
-        style={{ flex: 1, zIndex:0 }}
+        style={{ flex: 1, zIndex: 0 }}
         region={region}
         onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
         onPress={handleMapPress}
@@ -224,7 +223,7 @@ export default function HomeScreen ({ navigation, route }) {
             left: 0,
             right: 10,
             alignItems: 'center',
-            zIndex:999
+            zIndex: 999
           }}
           className="w-[80%] flex items-center justify-center"
         >
@@ -239,7 +238,7 @@ export default function HomeScreen ({ navigation, route }) {
 
       {deleteCityForm && (
         <Animated.View entering={FadeInLeft.duration(500)}
-          exiting={FadeOutLeft.duration(500)} style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center', zIndex:999 }} className='w-[80%] flex items-center justify-center'>
+          exiting={FadeOutLeft.duration(500)} style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center', zIndex: 999 }} className='w-[80%] flex items-center justify-center'>
           <DetailsDeleteForm setDeleteCityForm={setDeleteCityForm} currentCity={currentCity} currentDescription={currentDescription} selectedCityId={selectedCityId} />
         </Animated.View>
       )}
@@ -275,11 +274,11 @@ export default function HomeScreen ({ navigation, route }) {
 
       <View style={{ position: 'absolute', bottom: 50, right: 20 }}>
         <TouchableOpacity onPress={() =>
-          handleZoom(true)} style={{ marginBottom: 10 }}>
+          handleZoom({ zoomIn: true })} style={{ marginBottom: 10 }}>
           <FontAwesome name="search-plus" size={40} color="black" />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => handleZoom(false)}>
+        <TouchableOpacity onPress={() => handleZoom({ zoomIn: false })}>
           <FontAwesome name="search-minus" size={40} color="black" />
         </TouchableOpacity>
       </View>
