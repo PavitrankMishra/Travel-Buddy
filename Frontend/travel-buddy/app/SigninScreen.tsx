@@ -4,10 +4,11 @@ import Spinner from '../src/components/Spinner';
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, resetState } from '../src/store/slice/UserLoginSlice';
 import { useRouter } from 'expo-router';
+import type { AppDispatch } from '../src/store/store';
 
 export default function SigninScreen() {
     const router = useRouter();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     // Toggles the value if the button is pressed 
     const [pressed, setPressed] = useState<boolean>(false);
 
@@ -23,7 +24,7 @@ export default function SigninScreen() {
     };
 
     // Stores the updated value of email
-    function handleEmailInput(text) {
+    function handleEmailInput(text:string) {
         const emailPattern = /^[a-zA-Z0-9.]*@?[a-zA-Z0-9.]*$/;
         if (emailPattern.test(text)) {
             setEmailValue(text);
@@ -33,7 +34,7 @@ export default function SigninScreen() {
     }
 
     // Stores the updated value of password
-    function handlePasswordInput(text) {
+    function handlePasswordInput(text:string) {
         if (text.length <= 8) {
             setPasswordValue(text);
         }

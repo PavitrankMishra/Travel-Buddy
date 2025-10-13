@@ -4,8 +4,9 @@ import Spinner from '../src/components/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser, resetState } from '../src/store/slice/UserRegistrationSlice';
 import { router } from 'expo-router';
+import type { AppDispatch } from '../src/store/store';
 
-const SignupScreen = () => {
+export default function SignupScreen() {
   // State the toggles if button is pressed
   const [pressed, setPressed] = useState<boolean>(false);
 
@@ -27,12 +28,12 @@ const SignupScreen = () => {
   }
 
   // Function that updates the userName state
-  function handleUserNameInput(text) {
+  function handleUserNameInput(text: string) {
     setUserName(text);
   }
 
   // Function that updates the email state
-  function handleEmailInput(text) {
+  function handleEmailInput(text: string) {
     const emailPattern = /^[a-zA-Z0-9.]*@?[a-zA-Z0-9.]*$/;
     if (emailPattern.test(text)) {
       setEmail(text)
@@ -42,14 +43,14 @@ const SignupScreen = () => {
   }
 
   // Function that updates the password state
-  function handlePasswordInput(text) {
+  function handlePasswordInput(text: string) {
     if (text.length <= 8) {
       setPassword(text);
     }
   }
 
   // Function that updates the phone state
-  function handlePhoneInput(text) {
+  function handlePhoneInput(text: string) {
     if (text.length <= 10) {
       const phonePattern = /^[0-9]*$/;
       if (phonePattern.test(text)) {
@@ -61,7 +62,7 @@ const SignupScreen = () => {
   }
 
   // Add Redux dispatch hook
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   // Displays message if the value is true
   const registerSuccess = useSelector((state: any) => state.userRegistration.success);
@@ -136,5 +137,3 @@ const SignupScreen = () => {
     </View>
   )
 }
-
-export default SignupScreen;
