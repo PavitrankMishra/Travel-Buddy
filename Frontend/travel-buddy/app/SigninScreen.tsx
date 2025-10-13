@@ -1,11 +1,12 @@
 import { View, Text, Image, TextInput, Button, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Spinner from '../components/Spinner';
+import Spinner from '../src/components/Spinner';
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, resetState } from '../store/slice/UserLoginSlice';
+import { loginUser, resetState } from '../src/store/slice/UserLoginSlice';
+import { useRouter } from 'expo-router';
 
-const SigninScreen = ({ navigation }) => {
-
+export default function SigninScreen() {
+    const router = useRouter();
     const dispatch = useDispatch();
     // Toggles the value if the button is pressed 
     const [pressed, setPressed] = useState<boolean>(false);
@@ -18,7 +19,7 @@ const SigninScreen = ({ navigation }) => {
 
     // Navigates to Signup screen
     function handleNavigation() {
-        navigation.navigate("SignUp");
+        router.push("/SignupScreen");
     };
 
     // Stores the updated value of email
@@ -72,7 +73,7 @@ const SigninScreen = ({ navigation }) => {
             }, 2000);
         } else if (loginSuccess === true) {
             setTimeout(() => {
-                navigation.navigate("Home");
+                router.push("/HomeScreen");
                 dispatch(resetState());
             }, 2000);
         }
@@ -80,27 +81,27 @@ const SigninScreen = ({ navigation }) => {
 
     return (
         <View className='bg-white h-full w-full '>
-            <View className='h-[100%] w-full -bg--color-dark--1 justify-start items-center pt-20'>
-                <View className='flex justify-center items-center gap-y-8  '>
-                    <Image className='h-[100] w-[105] ' source={require('../assets/Logo.png')}></Image>
+            <View className='h-[100%] w-full bg-dark0 justify-start items-center pt-20'>
+                <View className='flex justify-center items-center gap-y-6  '>
+                    <Image className='h-[100px] w-[105px] ' source={require('../src/assets/Logo.png')}></Image>
                     <Text className='text-white text-2xl text-semibold tracking-widest'>Travel. Note. Remember</Text>
                 </View>
-                <View className='w-[80%] flex items-center justify-center gap-y-8 pt-8 '>
-                    <Text className='text-white text-2xl border-b-4 border-green-600 w-full  rounded-2xl text-center pb-2'>LOGIN</Text>
-                    <TextInput placeholder="Enter your email" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={emailValue} onChangeText={(text) => handleEmailInput(text)}></TextInput>
-                    <TextInput secureTextEntry={true} placeholder="Enter your Password" className='border border-gray-400 w-full px-2 rounded-lg text-white h-14 tracking-widest text-xl' placeholderTextColor="#999" value={passwordValue} onChangeText={(text) => handlePasswordInput(text)}></TextInput>
-                    <View className='w-full flex items-center gap-y-6'>
-                        <TouchableOpacity className={`w-full py-3 rounded-xl items-center ${pressed ? "bg-green-500" : "bg-green-600"}`} onPressIn={() => {
+                <View className='w-[80%] flex items-center justify-center gap-y-6 pt-6'>
+                    <Text className='text-white text-xl border-b-4 border-green-600 w-full  rounded-2xl text-center pb-2'>LOGIN</Text>
+                    <TextInput placeholder="Enter your email" className='border border-gray-400 w-full px-2 rounded-lg text-white h-12 tracking-widest text-xl' placeholderTextColor="#999" value={emailValue} onChangeText={(text) => handleEmailInput(text)}></TextInput>
+                    <TextInput secureTextEntry={true} placeholder="Enter your Password" className='border border-gray-400 w-full px-2 rounded-lg text-white h-12 tracking-widest text-xl' placeholderTextColor="#999" value={passwordValue} onChangeText={(text) => handlePasswordInput(text)}></TextInput>
+                    <View className='w-full flex items-center '>
+                        <TouchableOpacity className={`w-full py-3 rounded-xl items-center mb-6 ${pressed ? "bg-green-500" : "bg-green-600"}`} onPressIn={() => {
                             setPressed(true)
                         }
                         } onPressOut={() => setPressed(false)} activeOpacity={0.8} onPress={() => handleSignIn()}>
                             {!loginLoading ? (
-                                <Text className='text-white text-2xl font-medium tracking-wider' >Submit</Text>
+                                <Text className='text-white text-xl font-medium tracking-wider' >Submit</Text>
                             ) : (<Spinner />)
                             }
                         </TouchableOpacity>
                         <View>
-                            <Text className='text-white tracking-wider text-xl'>New User ? <Text className='text-green-600 tracking-widest' onPress={() => handleNavigation()}>Register</Text></Text>
+                            <Text className='text-white tracking-wider text-xl mb-4'>New User ? <Text className='text-green-600 tracking-widest' onPress={() => handleNavigation()}>Register</Text></Text>
                         </View>
 
                         {loginError && (<View><Text className='text-white tracking-wider text-xl text-center'>{loginMessage}</Text></View>)}
@@ -111,5 +112,3 @@ const SigninScreen = ({ navigation }) => {
         </View>
     )
 }
-
-export default SigninScreen;

@@ -3,46 +3,27 @@
     "name": "travel-buddy",
     "slug": "travel-buddy",
     "version": "1.0.0",
+    "scheme": "travel-buddy",
     "orientation": "portrait",
-    "scheme": "travelbuddy",
-    "userInterfaceStyle": "automatic",
-    "entryPoint": "expo-router/entry",
+    "icon": "./src/assets/Logo.png",
+    "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./src/assets/Logo.png",
+      "resizeMode": "contain"
+    },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.pavitrank.travelbuddy",
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE"
+        "foregroundImage": "./src/assets/Logo.png"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
-      "package": "com.pavitrank.travelbuddy"
+      "edgeToEdgeEnabled": true
     },
     "web": {
-      "output": "static",
-      "bundler": "metro"
+      "favicon": "./src/assets/Logo.png"
     },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen"
-      ],
-      "expo-web-browser"
-    ],
-    "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
-    },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "fcbe4aad-6ec4-4de7-ae16-ab0bc60a002c"
-      }
-    }
+    "plugins": ["expo-router"]
   }
 }

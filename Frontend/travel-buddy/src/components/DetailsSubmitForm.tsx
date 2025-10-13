@@ -70,7 +70,7 @@ const DetailsSubmitForm = ({ markerCoordinates, selectedCity, selectedCountry, s
 
 
   return (
-    <View className="-bg--color-dark--0 rounded-lg w-full items-center gap-y-4 py-4 ">
+    <View className="bg-dark0 rounded-lg w-full items-center gap-y-4 py-4 ">
       <TextInput
         placeholder="City Name"
         className="border border-gray-400 w-[90%] items-center justify-center rounded-lg text-white tracking-widest pl-4 text-xl"

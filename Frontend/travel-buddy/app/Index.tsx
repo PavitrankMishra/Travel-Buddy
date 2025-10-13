@@ -1,24 +1,17 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import "../global.css"
-import SigninScreen from '@/src/screens/SigninScreen';
-import SignupScreen from '@/src/screens/SignupScreen';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '@/src/screens/HomeScreen';
-import { Provider } from 'react-redux';
-import store from '../src/store/store';
+import React from "react";
+import { Animated, Pressable, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import SigninScreen from "./SigninScreen";
+import { Stack } from "expo-router";
 
-const Stack = createNativeStackNavigator();
-const Index = () => {
+const Home = () => {
+    const router = useRouter();
     return (
-        <Provider store={store}>
-            <Stack.Navigator initialRouteName='SignIn'>
-                <Stack.Screen name='SignIn' component={SigninScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="SignUp" component={SignupScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-            </Stack.Navigator>
-        </Provider>
+        <>
+        <Stack.Screen options={{ headerShown: false }} />
+        <SigninScreen />
+        </>
     )
-}
+};
 
-export default Index;
+export default Home;

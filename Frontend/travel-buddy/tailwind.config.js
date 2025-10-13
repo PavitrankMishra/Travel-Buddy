@@ -2,23 +2,23 @@
 module.exports = {
   content: [
     "./App.{js,jsx,ts,tsx}",
-    "./src/**/*.{js,jsx,ts,tsx}", // include all your screens/components
-    "./components/**/*.{js,jsx,ts,tsx}",
+    "./app/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}", 
   ],
-  presets: [require("nativewind/preset")],
   theme: {
     extend: {
       colors: {
-        "--color-brand--1": "#ffb545",
-        "--color-brand--2": "#00c46a",
-        "--color-dark--0": "#242a2e",
-        "--color-dark--1": "#2d3439",
-        "--color-dark--2": "#42484d",
-        "--color-light--1": "#aaa",
-        "--color-light--2": "#ececec",
-        "--color-light--3": "#d6dee0",
+        brand1: "#ffb545",
+        brand2: "#00c46a",
+        dark0: "#242a2e",
+        dark1: "#2d3439",
+        dark2: "#42484d",
+        light1: "#aaa",
+        light2: "#ececec",
+        light3: "#d6dee0",
       },
     },
   },
   plugins: [],
+  jsx: "react-jsx",
 };

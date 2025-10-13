@@ -3,15 +3,14 @@ import React, { useEffect, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { FontAwesome } from '@expo/vector-icons';
 import * as Location from "expo-location";
-import DetailsSubmitForm from "../components/DetailsSubmitForm";
-import DetailsDeleteForm from "../components/DetailsDeleteForm";
-import Spinner from '../components/Spinner';
+import DetailsSubmitForm from "../src/components/DetailsSubmitForm";
+import DetailsDeleteForm from "../src/components/DetailsDeleteForm";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from '../store/store';
-import { fetchUserCities } from '../store/slice/UserCitySlice';
-import Animated, { FadeInLeft, FadeInRight, FadeOutLeft, FadeOutRight } from 'react-native-reanimated';
+import { AppDispatch } from '../src/store/store';
+import { fetchUserCities } from '../src/store/slice/UserCitySlice';
+import Animated, { FadeInLeft, FadeOutLeft } from 'react-native-reanimated';
 
-const HomeScreen = ({ navigation, route }) => {
+export default function HomeScreen ({ navigation, route }) {
 
   // Gets the redux dispatch function
   const dispatch = useDispatch<AppDispatch>();
@@ -39,7 +38,6 @@ const HomeScreen = ({ navigation, route }) => {
 
   // Contains the error message
   const cityAddErrorMessage = useSelector((state: any) => state.addCity.errorMessage);
-
 
   /**
    * Access state from the userLogin slice
@@ -196,7 +194,7 @@ const HomeScreen = ({ navigation, route }) => {
   return (
     <View style={{ flex: 1 }} >
       <MapView
-        style={{ flex: 1 }}
+        style={{ flex: 1, zIndex:0 }}
         region={region}
         onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
         onPress={handleMapPress}
@@ -226,6 +224,7 @@ const HomeScreen = ({ navigation, route }) => {
             left: 0,
             right: 10,
             alignItems: 'center',
+            zIndex:999
           }}
           className="w-[80%] flex items-center justify-center"
         >
@@ -240,7 +239,7 @@ const HomeScreen = ({ navigation, route }) => {
 
       {deleteCityForm && (
         <Animated.View entering={FadeInLeft.duration(500)}
-          exiting={FadeOutLeft.duration(500)} style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center' }} className='w-[80%] flex items-center justify-center'>
+          exiting={FadeOutLeft.duration(500)} style={{ position: 'absolute', top: 75, left: 0, right: 10, alignItems: 'center', zIndex:999 }} className='w-[80%] flex items-center justify-center'>
           <DetailsDeleteForm setDeleteCityForm={setDeleteCityForm} currentCity={currentCity} currentDescription={currentDescription} selectedCityId={selectedCityId} />
         </Animated.View>
       )}
@@ -287,5 +286,3 @@ const HomeScreen = ({ navigation, route }) => {
     </View >
   );
 };
-
-export default HomeScreen;
