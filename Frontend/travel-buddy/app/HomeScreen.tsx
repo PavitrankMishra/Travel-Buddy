@@ -64,7 +64,7 @@ export default function HomeScreen() {
   const [selectedCityId, setSelectedCityId] = useState("");
 
   // Contains the name of the city
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState<string>("");
 
   // State that contains the coordinates of live location
   const [currentCoords, setCurrentCoords] = useState<{ latitude: number, longitude: number }>({ latitude: 0, longitude: 0 });
@@ -72,23 +72,23 @@ export default function HomeScreen() {
   /**
    * Access state from the userCitySlice
    */
-  const userCity = useSelector((state: any) => state.userCity.data);
+  const userCity = useSelector((state: any) => state?.userCity?.data);
   useEffect(() => {
     if (loginUserData?._id) {
-      dispatch(fetchUserCities(loginUserData._id));
+      dispatch(fetchUserCities(loginUserData?._id));
     }
   }, []);
 
   // Function that fires when a marker is pressed
   const handleMarkerPress = (c) => {
     // Sets the city name in current city
-    setCurrentCity(c.cityName);
+    setCurrentCity(c?.cityName);
 
     // Sets the description for current city
-    setCurrentDescription(c.notes);
+    setCurrentDescription(c?.notes);
 
     // Sets the id for selected city
-    setSelectedCityId(c._id);
+    setSelectedCityId(c?._id);
 
     // Displays delete city form
     setDeleteCityForm(true);
@@ -118,6 +118,11 @@ export default function HomeScreen() {
     });
   };
 
+  type Address = {
+    city?: string | null;
+    country?: string | null;
+  }
+
   // Function that gets the data of the selected city
   const handleMapPress = async (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
@@ -139,13 +144,13 @@ export default function HomeScreen() {
     setDeleteCityForm(false);
 
     // Access address of the selected location
-    let [address] = await Location.reverseGeocodeAsync({ latitude, longitude });
+    let [address]: Address[] = await Location.reverseGeocodeAsync({ latitude, longitude });
 
     // Sets the current selected city 
-    setSelectedCity(address.city);
+    setSelectedCity(address?.city ?? "");
 
     // Sets the current selected country
-    setSelectedCountry(address.country);
+    setSelectedCountry(address?.country ?? "");
   };
 
 
