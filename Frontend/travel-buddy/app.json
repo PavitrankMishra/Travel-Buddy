@@ -24,6 +24,7 @@
         "foregroundImage": "./src/assets/Logo.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
       "edgeToEdgeEnabled": true,
       "package": "com.pavitrank.travelbuddy"
     },
