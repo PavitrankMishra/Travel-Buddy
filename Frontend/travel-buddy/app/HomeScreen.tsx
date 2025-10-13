@@ -27,23 +27,23 @@ export default function HomeScreen() {
    */
 
   // Displays success if value is true otherwise false
-  const cityAddSuccess = useSelector((state: any) => state.addCity.success);
+  const cityAddSuccess = useSelector((state: any) => state?.addCity?.success);
 
   // Contains the success message
-  const cityAddSuccessMessage = useSelector((state: any) => state.addCity.successMessage);
+  const cityAddSuccessMessage = useSelector((state: any) => state?.addCity?.successMessage);
 
   // Displays error if value is true otherwise false
-  const cityAddError = useSelector((state: any) => state.addCity.error);
+  const cityAddError = useSelector((state: any) => state?.addCity?.error);
 
   // Contains the error message
-  const cityAddErrorMessage = useSelector((state: any) => state.addCity.errorMessage);
+  const cityAddErrorMessage = useSelector((state: any) => state?.addCity?.errorMessage);
 
   /**
    * Access state from the userLogin slice
    */
 
   // Stores the data of the user for login
-  const loginUserData = useSelector((state: any) => state.userLogin.loginUser);
+  const loginUserData = useSelector((state: any) => state?.userLogin?.loginUser);
 
   // Display add city form when value is true
   const [deleteCityForm, setDeleteCityForm] = useState<boolean>(false);
@@ -74,7 +74,9 @@ export default function HomeScreen() {
    */
   const userCity = useSelector((state: any) => state.userCity.data);
   useEffect(() => {
-    dispatch(fetchUserCities(loginUserData._id));
+    if (loginUserData?._id) {
+      dispatch(fetchUserCities(loginUserData._id));
+    }
   }, []);
 
   // Function that fires when a marker is pressed
@@ -179,16 +181,16 @@ export default function HomeScreen() {
   };
 
   // Display message if cityDeleteError is true
-  const cityDeleteError = useSelector((state: any) => state.deleteCity.error);
+  const cityDeleteError = useSelector((state: any) => state?.deleteCity?.error);
 
   // Display message if cityDeleteSuccess is true
-  const cityDeleteSuccess = useSelector((state: any) => state.deleteCity.success);
+  const cityDeleteSuccess = useSelector((state: any) => state?.deleteCity?.success);
 
   // Display spinner ig cityDeleteLoading is true
-  const cityDeleteLoading = useSelector((state: any) => state.deleteCity.loading);
+  const cityDeleteLoading = useSelector((state: any) => state?.deleteCity?.loading);
 
   // Contains the message to be displayed
-  const cityDeleteMessage = useSelector((state: any) => state.deleteCity.message);
+  const cityDeleteMessage = useSelector((state: any) => state?.deleteCity?.message);
 
   return (
     <View style={{ flex: 1 }} >
