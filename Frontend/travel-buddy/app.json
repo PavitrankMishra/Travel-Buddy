@@ -19,11 +19,20 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/Logo.png"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.pavitrank.travelbuddy"
     },
     "web": {
       "favicon": "./src/assets/Logo.png"
     },
-    "plugins": ["expo-router"]
+    "plugins": [
+      "expo-router"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "fcbe4aad-6ec4-4de7-ae16-ab0bc60a002c"
+      }
+    }
   }
 }
